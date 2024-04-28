@@ -11,7 +11,8 @@ import com.itwill.transaction.controller.TransactionDaoImpl;
 
 public class Main {
     public static void main(String[] args) {
-    	try {
+        try {
+            DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
             Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
 
             // MVC 컴포넌트 초기화
@@ -21,7 +22,6 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    	
-        
+
     }
 }
