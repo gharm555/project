@@ -31,7 +31,6 @@ public class Main {
         frame.setTitle("Transaction Management");
         frame.setBounds(100, 100, 393, 852);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLocation(null);
         frame.setResizable(false);
         frame.getContentPane().setLayout(null);
         
