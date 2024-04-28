@@ -4,7 +4,7 @@ import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 
 public class TransactionTableModel extends AbstractTableModel {
-    private final String[] columnNames = {"ID", "Type", "Amount", "Category ID", "Date", "Description"};
+    private final String[] columnNames = {"ID", "Type", "Amount", "Category ID", "Transaction_Date", "Description"};
     private ArrayList<Transaction> transactions;
 
     public TransactionTableModel() {
@@ -20,7 +20,7 @@ public class TransactionTableModel extends AbstractTableModel {
     public int getColumnCount() {
         return columnNames.length;
     }
-
+    
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         Transaction transaction = transactions.get(rowIndex);
@@ -61,4 +61,8 @@ public class TransactionTableModel extends AbstractTableModel {
         transactions.remove(rowIndex);
         fireTableRowsDeleted(rowIndex, rowIndex);
     }
+    public Transaction getTransactionAt(int rowIndex) {
+        return transactions.get(rowIndex);
+    }
+    
 }
