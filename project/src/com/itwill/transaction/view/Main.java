@@ -114,7 +114,7 @@ public class Main {
 	private void resetTableModel(List<Transaction> transaction) {
 		tableModel = new DefaultTableModel(null, COLUMN_NAMES);
 		for (Transaction t : transaction) {
-			Object[] row = { t.getCatName(), t.getIncome(), t.getNotes( ) };
+			Object[] row = { t.getCategory(), t.getType(), t.getAmount() };
 			tableModel.addRow(row);
 		}
 		detailsTable.setModel(tableModel);

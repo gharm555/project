@@ -60,15 +60,35 @@ public class TransactionDao {
 	private static final String sql = "INSERT INTO Transactions (Type, Amount, Category_ID, Transaction_Date, Description) VALUES (?, ?, ?, ?, ?)";
 
 	public void insertTransaction(Transaction transaction) {
-		int result = 0;
-		Connection conn = null;
-		PreparedStatement stmt = null;
-		try {
+		String sqlBase = "INSERT INTO Transactions (Type, Amount, Category_ID, Transaction_Date, Description) VALUES (?, ?, ?, ?, ?)";
+		String sqlIncome = "INSERT INTO IncomeTransactions (Type, Amount, Category_ID, Transaction_Date, Description) VALUES (?, ?, ?, ?, ?)";
+		String sqlExpense = "INSERT INTO ExpenseTransactions (Type, Amount, Category_ID, Transaction_Date, Description) VALUES (?, ?, ?, ?, ?)";
+		
+		String selectedSql = sqlBase; // 기본 SQL
 
-			conn = DriverManager.getConnection(URL, USER, PASSWORD);
-			stmt = conn.prepareStatement(sql);
+		// 수입이나 지출에 따라 다른 테이블에 삽입
+		if (transaction.getType().equals("수입")) {
+			selectedSql = sqlIncome;
+		} else if (transaction.getType().equals("지출")) {
+			selectedSql = sqlExpense;
+		}
 
-			stmt.executeUpdate();
+		// 카테고리에 따라 SQL을 추가 조정할 수 있습니다.
+		// 예: if (transaction.getCategory().equals("특정 카테고리")) { ... }
+
+		try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			 PreparedStatement stmt = conn.prepareStatement(selectedSql)) {
+			
+			stmt.setString(1, transaction.getType());
+			stmt.setDouble(2, transaction.getAmount());
+			stmt.setString(3, transaction.getCategory());
+			stmt.setDate(4, new java.sql.Date(transaction.getDate().getTime()));
+			stmt.setString(5, transaction.getNotes());
+			
+			int affectedRows = stmt.executeUpdate();
+			if (affectedRows == 0) {
+				throw new SQLException("Creating transaction failed, no rows affected.");
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -119,19 +139,48 @@ public class TransactionDao {
 
 		Connection conn = null;
 		PreparedStatement stmt = null;
+		ResultSet rs = null;
 		try {
 			conn = DriverManager.getConnection(URL, USER, PASSWORD);
 			stmt = conn.prepareStatement(SELECT_BY_DATE);
 			stmt.setDate(1, new java.sql.Date(date.getTime()));
-			try (ResultSet rs = stmt.executeQuery()) {
-				while (rs.next()) {
-					transactions.add(makeTransactionFromResultSet(rs));
-				}
+			rs = stmt.executeQuery();
+			
+			while (rs.next()) {
+				transactions.add(makeTransactionFromResultSet(rs));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			closeResources(conn, stmt, rs);
 		}
 		return transactions;
 	}
+	
+	private static final String SQL_UPDATE_TRANSACTION = "UPDATE Transactions SET Type=?, Amount=?, Category_ID=?, Transaction_Date=?, Description=? WHERE ID=?";
 
+	public void updateTransaction(Transaction transaction) {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+			try{
+					conn = DriverManager.getConnection(URL, USER, PASSWORD);
+					stmt = prepareUpdateStatement(conn, transaction);
+					stmt.executeUpdate();
+			} catch (SQLException e) {
+					e.printStackTrace();
+			} finally {
+				closeResources(conn, stmt);
+			}
+	}
+	
+	private PreparedStatement prepareUpdateStatement(Connection conn, Transaction transaction) throws SQLException {
+			PreparedStatement stmt = conn.prepareStatement(SQL_UPDATE_TRANSACTION);
+			stmt.setString(1, transaction.getType());
+			stmt.setDouble(2, transaction.getAmount());
+			stmt.setString(3, transaction.getCategory());
+			stmt.setDate(4, new java.sql.Date(transaction.getDate().getTime()));
+			stmt.setString(5, transaction.getNotes());
+			stmt.setInt(6, transaction.getId());
+			return stmt;
+	}
 }

@@ -9,6 +9,7 @@ public class Transaction {
 		public static final String COL_TYPE = "TRANSACTIONTYPE";
 		public static final String COL_CATEGORY = "CATEGORY";
 		public static final String COL_TRANSACTION_DATE = "TRANSACTIONDATE";
+		public static final String COL_AMOUNT = "AMOUNT";
 		public static final String COL_NOTES = "NOTES";
 
 	}
@@ -16,7 +17,8 @@ public class Transaction {
 	private int id;
 	private String type;
 	private String category;
-	private Date Date;
+	private Date date;
+	private double amount;
 	private String notes;
 
 	public Transaction(int id, String type, String category, java.util.Date date, String notes) {
@@ -24,7 +26,7 @@ public class Transaction {
 		this.id = id;
 		this.type = type;
 		this.category = category;
-		Date = date;
+		this.date = date;
 		this.notes = notes;
 	}
 
@@ -53,11 +55,19 @@ public class Transaction {
 	}
 
 	public Date getDate() {
-		return Date;
+		return date;
 	}
 
 	public void setDate(Date date) {
-		Date = date;
+		this.date = date;
+	}
+
+	public double getAmount() {
+		return amount;
+	}
+
+	public void setAmount(double amount) {
+		this.amount = amount;
 	}
 
 	public String getNotes() {
@@ -70,8 +80,8 @@ public class Transaction {
 
 	@Override
 	public String toString() {
-		return "Transaction [id=" + id + ", type=" + type + ", category=" + category + ", Date=" + Date + ", notes="
-				+ notes + "]";
+		return "Transaction [id=" + id + ", type=" + type + ", category=" + category + ", date=" + date	 + ", amount="
+				+ amount + ", notes=" + notes + "]";
 	}
 
 }
