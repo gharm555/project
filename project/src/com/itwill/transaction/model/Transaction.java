@@ -6,31 +6,25 @@ public class Transaction {
 	public static final class Entity {
 		public static final String TBL_Transaction = "MONEYMANAGER";
 		public static final String COL_ID = "ENTRYID";
-		public static final String COL_PAYMENT = "PAYMENTMETHOD";
-		public static final String COL_INCOME = "INCOMESOURCE";
-		public static final String COL_CATEGORY_NAME = "CATEGORYNAME";
-		public static final String COL_EXPENSE_DATE = "EXPENSEDATE";
-		public static final String COL_INCOME_DATE = "INCOMEDATE";
+		public static final String COL_TYPE = "TRANSACTIONTYPE";
+		public static final String COL_CATEGORY = "CATEGORY";
+		public static final String COL_TRANSACTION_DATE = "TRANSACTIONDATE";
 		public static final String COL_NOTES = "NOTES";
 
 	}
 
 	private int id;
-	private String payment;
-	private String income;
-	private String catName;
-	private Date exDate;
-	private Date inDate;
+	private String type;
+	private String category;
+	private Date Date;
 	private String notes;
 
-	public Transaction(int id, String payment, String income, String catName, Date exDate, Date inDate, String notes) {
+	public Transaction(int id, String type, String category, java.util.Date date, String notes) {
 		super();
 		this.id = id;
-		this.payment = payment;
-		this.income = income;
-		this.catName = catName;
-		this.exDate = exDate;
-		this.inDate = inDate;
+		this.type = type;
+		this.category = category;
+		Date = date;
 		this.notes = notes;
 	}
 
@@ -42,44 +36,28 @@ public class Transaction {
 		this.id = id;
 	}
 
-	public String getPayment() {
-		return payment;
+	public String getType() {
+		return type;
 	}
 
-	public void setPayment(String payment) {
-		this.payment = payment;
+	public void setType(String type) {
+		this.type = type;
 	}
 
-	public String getIncome() {
-		return income;
+	public String getCategory() {
+		return category;
 	}
 
-	public void setIncome(String income) {
-		this.income = income;
+	public void setCategory(String category) {
+		this.category = category;
 	}
 
-	public String getCatName() {
-		return catName;
+	public Date getDate() {
+		return Date;
 	}
 
-	public void setCatName(String catName) {
-		this.catName = catName;
-	}
-
-	public Date getExDate() {
-		return exDate;
-	}
-
-	public void setExDate(Date exDate) {
-		this.exDate = exDate;
-	}
-
-	public Date getInDate() {
-		return inDate;
-	}
-
-	public void setInDate(Date inDate) {
-		this.inDate = inDate;
+	public void setDate(Date date) {
+		Date = date;
 	}
 
 	public String getNotes() {
@@ -92,8 +70,8 @@ public class Transaction {
 
 	@Override
 	public String toString() {
-		return "Transaction [id=" + id + ", payment=" + payment + ", income=" + income + ", catName=" + catName
-				+ ", exDate=" + exDate + ", inDate=" + inDate + ", notes=" + notes + "]";
+		return "Transaction [id=" + id + ", type=" + type + ", category=" + category + ", Date=" + Date + ", notes="
+				+ notes + "]";
 	}
 
 }

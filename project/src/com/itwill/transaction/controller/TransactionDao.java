@@ -102,14 +102,12 @@ public class TransactionDao {
 
 	private Transaction makeTransactionFromResultSet(ResultSet rs) throws SQLException {
 		int id = rs.getInt(COL_ID);
-		String payment = rs.getString(COL_PAYMENT);
-		String income = rs.getString(COL_INCOME);
-		String categoryName = rs.getString(COL_CATEGORY_NAME);
-		Date exDate = rs.getDate(COL_EXPENSE_DATE);
-		Date indate = rs.getDate(COL_INCOME_DATE);
+		String type = rs.getString(COL_TYPE);
+		String category = rs.getString(COL_CATEGORY);
+		Date Date = rs.getDate(COL_TRANSACTION_DATE);
 		String notes = rs.getString(COL_NOTES);
 
-		Transaction t = new Transaction(id, payment, income, categoryName, exDate, indate, notes);
+		Transaction t = new Transaction(id, type, category, Date, notes);
 
 		return t;
 	}
@@ -121,7 +119,7 @@ public class TransactionDao {
 
 		Connection conn = null;
 		PreparedStatement stmt = null;
-		try  {
+		try {
 			conn = DriverManager.getConnection(URL, USER, PASSWORD);
 			stmt = conn.prepareStatement(SELECT_BY_DATE);
 			stmt.setDate(1, new java.sql.Date(date.getTime()));
