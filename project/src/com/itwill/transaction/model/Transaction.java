@@ -3,73 +3,97 @@ package com.itwill.transaction.model;
 import java.util.Date;
 
 public class Transaction {
-    private int id;
-    private String type; // '수입', '지출'
-    private double amount;
-    private int categoryId;
-    private Date date;
-    private String description;
+	public static final class Entity {
+		public static final String TBL_Transaction = "MONEYMANAGER";
+		public static final String COL_ID = "ENTRYID";
+		public static final String COL_PAYMENT = "PAYMENTMETHOD";
+		public static final String COL_INCOME = "INCOMESOURCE";
+		public static final String COL_CATEGORY_NAME = "CATEGORYNAME";
+		public static final String COL_EXPENSE_DATE = "EXPENSEDATE";
+		public static final String COL_INCOME_DATE = "INCOMEDATE";
+		public static final String COL_NOTES = "NOTES";
 
-    // 생성자
-    public Transaction(int id, String type, double amount, int categoryId, Date date, String description) {
-        this.id = id;
-        this.type = type;
-        this.amount = amount;
-        this.categoryId = categoryId;
-        this.date = date;
-        this.description = description;
-    }
-
-    // getter 및 setter 메소드
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-	public double getAmount() {
-		return amount;
 	}
 
-	public void setAmount(double amount) {
-		this.amount = amount;
+	private int id;
+	private String payment;
+	private String income;
+	private String catName;
+	private Date exDate;
+	private Date inDate;
+	private String notes;
+
+	public Transaction(int id, String payment, String income, String catName, Date exDate, Date inDate, String notes) {
+		super();
+		this.id = id;
+		this.payment = payment;
+		this.income = income;
+		this.catName = catName;
+		this.exDate = exDate;
+		this.inDate = inDate;
+		this.notes = notes;
 	}
 
-	public int getCategoryId() {
-		return categoryId;
+	public int getId() {
+		return id;
 	}
 
-	public void setCategoryId(int categoryId) {
-		this.categoryId = categoryId;
+	public void setId(int id) {
+		this.id = id;
 	}
 
-	public Date getDate() {
-		return date;
+	public String getPayment() {
+		return payment;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public void setPayment(String payment) {
+		this.payment = payment;
 	}
 
-	public String getDescription() {
-		return description;
+	public String getIncome() {
+		return income;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setIncome(String income) {
+		this.income = income;
 	}
 
-   
-    // 데이터베이스 연동 로직 구현 (예: 거래 추가, 수정, 삭제 등)
+	public String getCatName() {
+		return catName;
+	}
+
+	public void setCatName(String catName) {
+		this.catName = catName;
+	}
+
+	public Date getExDate() {
+		return exDate;
+	}
+
+	public void setExDate(Date exDate) {
+		this.exDate = exDate;
+	}
+
+	public Date getInDate() {
+		return inDate;
+	}
+
+	public void setInDate(Date inDate) {
+		this.inDate = inDate;
+	}
+
+	public String getNotes() {
+		return notes;
+	}
+
+	public void setNotes(String notes) {
+		this.notes = notes;
+	}
+
+	@Override
+	public String toString() {
+		return "Transaction [id=" + id + ", payment=" + payment + ", income=" + income + ", catName=" + catName
+				+ ", exDate=" + exDate + ", inDate=" + inDate + ", notes=" + notes + "]";
+	}
+
 }
-
