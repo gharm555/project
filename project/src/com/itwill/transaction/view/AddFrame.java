@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.SwingConstants;
 
 public class AddFrame extends JFrame {
 
@@ -22,10 +23,20 @@ public class AddFrame extends JFrame {
 	private JPanel contentPane;
 	private Component parent;
 	private TransactionDao dao = TransactionDao.getInstance();
-	private JTextField textField;
 	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
+	private JLabel lblDate;
+	private JComboBox category;
+	private JLabel lblMemo;
+	private JButton btnBack;
+	private JButton btnAdd;
+	private JLabel lblDate_1;
+	private JTextField textField;
+	private JComboBox category_1;
+	private JLabel lblMemo_1;
+	private JButton btnBack_1;
+	private JButton btnAdd_1;
+	private JTextField paymentamount;
+	private JTextField memoField;
 	
 
 	/**
@@ -57,7 +68,7 @@ public class AddFrame extends JFrame {
 	 */
 	public void init() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 757, 550);
+		setBounds(100, 100, 693, 514);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -66,7 +77,7 @@ public class AddFrame extends JFrame {
 		
 		// 탭 생성
         JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.setBounds(10, 10, 720, 500);
+        tabbedPane.setBounds(6, 6, 681, 474);
         contentPane.add(tabbedPane);
 		
 		// 지출 탭
@@ -74,102 +85,74 @@ public class AddFrame extends JFrame {
         spendPanel.setLayout(null);
         tabbedPane.addTab("지출", spendPanel);
         
-        JLabel lblNewLabel = new JLabel("New label");
-        lblNewLabel.setBounds(288, 25, 122, 38);
-        spendPanel.add(lblNewLabel);
+        lblDate = new JLabel("");
+        lblDate.setHorizontalAlignment(SwingConstants.CENTER);
+        lblDate.setBounds(271, 29, 122, 38);
+        spendPanel.add(lblDate);
         
-        textField = new JTextField();
-        textField.setBounds(280, 80, 130, 38);
-        spendPanel.add(textField);
-        textField.setColumns(10);
+        paymentamount = new JTextField();
+        paymentamount.setBounds(184, 79, 291, 72);
+        spendPanel.add(paymentamount);
+        paymentamount.setColumns(10);
         
-        JButton btnNewButton = new JButton("New button");
-        btnNewButton.setBounds(78, 142, 117, 29);
-        spendPanel.add(btnNewButton);
+        category = new JComboBox();
+        category.setBounds(141, 163, 378, 62);
+        spendPanel.add(category);
         
-        JButton btnNewButton_1 = new JButton("New button");
-        btnNewButton_1.setBounds(216, 142, 117, 29);
-        spendPanel.add(btnNewButton_1);
+        lblMemo = new JLabel("Memo");
+        lblMemo.setHorizontalAlignment(SwingConstants.CENTER);
+        lblMemo.setBounds(184, 237, 104, 62);
+        spendPanel.add(lblMemo);
         
-        JButton btnNewButton_2 = new JButton("New button");
-        btnNewButton_2.setBounds(354, 142, 117, 29);
-        spendPanel.add(btnNewButton_2);
+        memoField = new JTextField();
+        memoField.setBounds(351, 237, 168, 62);
+        spendPanel.add(memoField);
+        memoField.setColumns(10);
         
-        JButton btnNewButton_3 = new JButton("New button");
-        btnNewButton_3.setBounds(492, 142, 117, 29);
-        spendPanel.add(btnNewButton_3);
+        btnBack = new JButton("<");
+        btnBack.setBounds(402, 393, 117, 29);
+        spendPanel.add(btnBack);
         
-        JComboBox comboBox = new JComboBox();
-        comboBox.setBounds(222, 209, 255, 27);
-        spendPanel.add(comboBox);
-        
-        JLabel lblNewLabel_1 = new JLabel("New label");
-        lblNewLabel_1.setBounds(93, 288, 61, 16);
-        spendPanel.add(lblNewLabel_1);
-        
-        textField_1 = new JTextField();
-        textField_1.setBounds(203, 283, 130, 26);
-        spendPanel.add(textField_1);
-        textField_1.setColumns(10);
-        
-        JButton btnNewButton_4 = new JButton("New button");
-        btnNewButton_4.setBounds(444, 407, 117, 29);
-        spendPanel.add(btnNewButton_4);
-        
-        JButton btnNewButton_4_1 = new JButton("New button");
-        btnNewButton_4_1.setBounds(576, 407, 117, 29);
-        spendPanel.add(btnNewButton_4_1);
+        btnAdd = new JButton("v");
+        btnAdd.setBounds(537, 393, 117, 29);
+        spendPanel.add(btnAdd);
 
         // 수입 탭
         JPanel incomePanel = new JPanel();
         incomePanel.setLayout(null);
         tabbedPane.addTab("수입", incomePanel);
         
-        textField_2 = new JTextField();
-        textField_2.setColumns(10);
-        textField_2.setBounds(278, 45, 130, 38);
-        incomePanel.add(textField_2);
+        lblDate_1 = new JLabel("");
+        lblDate_1.setHorizontalAlignment(SwingConstants.CENTER);
+        lblDate_1.setBounds(269, 29, 122, 38);
+        incomePanel.add(lblDate_1);
         
-        JButton btnNewButton_5 = new JButton("New button");
-        btnNewButton_5.setBounds(54, 103, 117, 29);
-        incomePanel.add(btnNewButton_5);
+        textField = new JTextField();
+        textField.setColumns(10);
+        textField.setBounds(184, 79, 291, 72);
+        incomePanel.add(textField);
         
-        JButton btnNewButton_1_1 = new JButton("New button");
-        btnNewButton_1_1.setBounds(192, 103, 117, 29);
-        incomePanel.add(btnNewButton_1_1);
+        category_1 = new JComboBox();
+        category_1.setBounds(141, 163, 378, 62);
+        incomePanel.add(category_1);
         
-        JButton btnNewButton_2_1 = new JButton("New button");
-        btnNewButton_2_1.setBounds(330, 103, 117, 29);
-        incomePanel.add(btnNewButton_2_1);
+        lblMemo_1 = new JLabel("Memo");
+        lblMemo_1.setHorizontalAlignment(SwingConstants.CENTER);
+        lblMemo_1.setBounds(184, 237, 104, 62);
+        incomePanel.add(lblMemo_1);
         
-        JButton btnNewButton_3_1 = new JButton("New button");
-        btnNewButton_3_1.setBounds(468, 103, 117, 29);
-        incomePanel.add(btnNewButton_3_1);
+        textField_1 = new JTextField();
+        textField_1.setColumns(10);
+        textField_1.setBounds(351, 237, 168, 62);
+        incomePanel.add(textField_1);
         
-        JComboBox comboBox_1 = new JComboBox();
-        comboBox_1.setBounds(198, 170, 255, 27);
-        incomePanel.add(comboBox_1);
+        btnBack_1 = new JButton("<");
+        btnBack_1.setBounds(402, 393, 117, 29);
+        incomePanel.add(btnBack_1);
         
-        JLabel lblNewLabel_1_1 = new JLabel("New label");
-        lblNewLabel_1_1.setBounds(69, 249, 61, 16);
-        incomePanel.add(lblNewLabel_1_1);
-        
-        textField_3 = new JTextField();
-        textField_3.setColumns(10);
-        textField_3.setBounds(179, 244, 130, 26);
-        incomePanel.add(textField_3);
-        
-        JButton btnNewButton_4_2 = new JButton("New button");
-        btnNewButton_4_2.setBounds(420, 368, 117, 29);
-        incomePanel.add(btnNewButton_4_2);
-        
-        JButton btnNewButton_4_1_1 = new JButton("New button");
-        btnNewButton_4_1_1.setBounds(552, 368, 117, 29);
-        incomePanel.add(btnNewButton_4_1_1);
-        
-        JLabel lblNewLabel_2 = new JLabel("New label");
-        lblNewLabel_2.setBounds(302, 13, 61, 16);
-        incomePanel.add(lblNewLabel_2);
+        btnAdd_1 = new JButton("v");
+        btnAdd_1.setBounds(537, 393, 117, 29);
+        incomePanel.add(btnAdd_1);
 
 	}
 }
