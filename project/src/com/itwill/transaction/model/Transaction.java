@@ -18,19 +18,19 @@ public class Transaction {
 	private String type;
 	private String category;
 	private Date date;
-	private double amount;
+	private int amount;
 	private String notes;
 
 	public Transaction() {
 
 	}
 
-	public Transaction(int id, String type, String category, java.util.Date date, String notes) {
-		super();
+	public Transaction(int id, String type, String category, Date date, int amount, String notes) {
 		this.id = id;
 		this.type = type;
 		this.category = category;
 		this.date = date;
+		this.amount = amount;
 		this.notes = notes;
 	}
 
@@ -66,11 +66,11 @@ public class Transaction {
 		this.date = date;
 	}
 
-	public double getAmount() {
+	public int getAmount() {
 		return amount;
 	}
 
-	public void setAmount(double amount) {
+	public void setAmount(int amount) {
 		this.amount = amount;
 	}
 

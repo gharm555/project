@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -57,40 +58,30 @@ public class TransactionDao {
 		closeResources(conn, smtm, null);
 	}
 
-	private static final String sql = "INSERT INTO Transactions (Type, Amount, Category_ID, Transaction_Date, Description) VALUES (?, ?, ?, ?, ?)";
-
-	public void insertTransaction(Transaction transaction) {
-		String sqlBase = "INSERT INTO Transactions (Type, Amount, Category_ID, Transaction_Date, Description) VALUES (?, ?, ?, ?, ?)";
-		String sqlIncome = "INSERT INTO IncomeTransactions (Type, Amount, Category_ID, Transaction_Date, Description) VALUES (?, ?, ?, ?, ?)";
-		String sqlExpense = "INSERT INTO ExpenseTransactions (Type, Amount, Category_ID, Transaction_Date, Description) VALUES (?, ?, ?, ?, ?)";
-		
-		String selectedSql = sqlBase; // 기본 SQL
-
-		// 수입이나 지출에 따라 다른 테이블에 삽입
-		if (transaction.getType().equals("수입")) {
-			selectedSql = sqlIncome;
-		} else if (transaction.getType().equals("지출")) {
-			selectedSql = sqlExpense;
-		}
-
-		// 카테고리에 따라 SQL을 추가 조정할 수 있습니다.
-		// 예: if (transaction.getCategory().equals("특정 카테고리")) { ... }
-
-		try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-			 PreparedStatement stmt = conn.prepareStatement(selectedSql)) {
-			
+	public void create(Transaction transaction) {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		try {
+			conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			String sql = String.format("INSERT INTO %s (%s, %s, %s, %s, %s) VALUES (?, ?, ?, ?, ?)", TBL_Transaction,
+					COL_TYPE, COL_CATEGORY, COL_AMOUNT, COL_TRANSACTION_DATE, COL_NOTES);
+			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, transaction.getType());
-			stmt.setDouble(2, transaction.getAmount());
-			stmt.setString(3, transaction.getCategory());
-			stmt.setDate(4, new java.sql.Date(transaction.getDate().getTime()));
+			stmt.setString(2, transaction.getCategory());
+			stmt.setInt(3, transaction.getAmount());
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String formattedDate = sdf.format(transaction.getDate());
+			stmt.setString(4, formattedDate);
 			stmt.setString(5, transaction.getNotes());
-			
+
 			int affectedRows = stmt.executeUpdate();
 			if (affectedRows == 0) {
 				throw new SQLException("Creating transaction failed, no rows affected.");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			closeResources(conn, stmt);
 		}
 	}
 
@@ -115,6 +106,8 @@ public class TransactionDao {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			closeResources(conn, stmt, rs);
 		}
 
 		return result;
@@ -124,15 +117,17 @@ public class TransactionDao {
 		int id = rs.getInt(COL_ID);
 		String type = rs.getString(COL_TYPE);
 		String category = rs.getString(COL_CATEGORY);
-		Date Date = rs.getDate(COL_TRANSACTION_DATE);
+		Date date = rs.getDate(COL_TRANSACTION_DATE);
+		int amount = rs.getInt(COL_AMOUNT);
 		String notes = rs.getString(COL_NOTES);
 
-		Transaction t = new Transaction(id, type, category, Date, notes);
-
+		Transaction t = new Transaction(id, type, category, date, amount, notes);
+		System.out.println(t.getAmount());
 		return t;
 	}
 
-	private static final String SELECT_BY_DATE = "SELECT * FROM Transactions WHERE Transaction_Date = ?";
+	private static final String SELECT_BY_DATE = String
+			.format("SELECT * FROM %s WHERE TransactionDate = to_date(?,'YYYY-MM-DD')", TBL_Transaction);
 
 	public List<Transaction> getTransactionsByDate(Date date) {
 		List<Transaction> transactions = new ArrayList<>();
@@ -143,9 +138,11 @@ public class TransactionDao {
 		try {
 			conn = DriverManager.getConnection(URL, USER, PASSWORD);
 			stmt = conn.prepareStatement(SELECT_BY_DATE);
-			stmt.setDate(1, new java.sql.Date(date.getTime()));
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String formattedDate = sdf.format(date);
+			stmt.setString(1, formattedDate);
 			rs = stmt.executeQuery();
-			
+
 			while (rs.next()) {
 				transactions.add(makeTransactionFromResultSet(rs));
 			}
@@ -156,31 +153,5 @@ public class TransactionDao {
 		}
 		return transactions;
 	}
-	
-	private static final String SQL_UPDATE_TRANSACTION = "UPDATE Transactions SET Type=?, Amount=?, Category_ID=?, Transaction_Date=?, Description=? WHERE ID=?";
 
-	public void updateTransaction(Transaction transaction) {
-		Connection conn = null;
-		PreparedStatement stmt = null;
-			try{
-					conn = DriverManager.getConnection(URL, USER, PASSWORD);
-					stmt = prepareUpdateStatement(conn, transaction);
-					stmt.executeUpdate();
-			} catch (SQLException e) {
-					e.printStackTrace();
-			} finally {
-				closeResources(conn, stmt);
-			}
-	}
-	
-	private PreparedStatement prepareUpdateStatement(Connection conn, Transaction transaction) throws SQLException {
-			PreparedStatement stmt = conn.prepareStatement(SQL_UPDATE_TRANSACTION);
-			stmt.setString(1, transaction.getType());
-			stmt.setDouble(2, transaction.getAmount());
-			stmt.setString(3, transaction.getCategory());
-			stmt.setDate(4, new java.sql.Date(transaction.getDate().getTime()));
-			stmt.setString(5, transaction.getNotes());
-			stmt.setInt(6, transaction.getId());
-			return stmt;
-	}
 }

@@ -5,6 +5,8 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Date;
 import java.util.List;
 
@@ -18,10 +20,11 @@ import javax.swing.table.DefaultTableModel;
 
 import com.itwill.transaction.controller.TransactionDao;
 import com.itwill.transaction.model.Transaction;
+import com.itwill.transaction.view.AddFrame.AddNotify;
 import com.toedter.calendar.JCalendar;
 
-public class Main {
-    private static final String[] COLUMN_NAMES = { "카테고리", "종류", "금액" };
+public class Main implements AddNotify {
+    private static final String[] COLUMN_NAMES = { "카테고리", "종류", "금액", "메모" };
 
     private JFrame frame;
     private JCalendar calendar;
@@ -50,7 +53,7 @@ public class Main {
 
     public Main() {
         initialize();
-        initTable();
+        displayTransactionsForDate(selectedDate);
     }
 
     private void initTable() {
@@ -70,6 +73,16 @@ public class Main {
         calendar = new JCalendar();
         calendar.setBounds(125, 36, 600, 400);
         frame.getContentPane().add(calendar);
+        selectedDate = calendar.getDate();
+        calendar.addPropertyChangeListener("calendar", event -> {
+            if ("calendar".equals(event.getPropertyName())) {
+                selectedDate = calendar.getDate();
+                displayTransactionsForDate(selectedDate);
+                if (addFrame != null && addFrame.isVisible()) {
+                    addFrame.setDate(selectedDate);
+                }
+            }
+        });
 
         updateButton = new JButton("Update");
         updateButton.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
@@ -77,10 +90,8 @@ public class Main {
         updateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (addFrame == null || !addFrame.isVisible()) {
-                    addFrame = new AddFrame(frame);
-                    addFrame.setVisible(true);
-                }
+                AddFrame.showAddFrame(frame, Main.this, selectedDate);
+
             }
         });
         frame.getContentPane().add(updateButton);
@@ -100,18 +111,6 @@ public class Main {
         detailsTable.setModel(tableModel);
         scrollPane.setViewportView(detailsTable);
 
-        calendar.addPropertyChangeListener("date", event -> {
-            if ("date".equals(event.getPropertyName())) {
-                selectedDate = calendar.getDate();
-                displayTransactionsForDate(selectedDate);
-                if (addFrame != null && addFrame.isVisible()) {
-                    EventQueue.invokeLater(() -> {
-                        addFrame.updateDateLabel(selectedDate);
-                    });
-                }
-            }
-        });
-
     }
 
     private void displayTransactionsForDate(Date date) {
@@ -120,12 +119,17 @@ public class Main {
     }
 
     private void resetTableModel(List<Transaction> transaction) {
+
         tableModel = new DefaultTableModel(null, COLUMN_NAMES);
         for (Transaction t : transaction) {
-            Object[] row = { t.getCategory(), t.getType(), t.getAmount() };
+            Object[] row = { t.getCategory(), t.getType(), t.getAmount(), t.getNotes() };
             tableModel.addRow(row);
         }
         detailsTable.setModel(tableModel);
     }
 
+    @Override
+    public void addSuccess() {
+        displayTransactionsForDate(selectedDate);
+    }
 }
