@@ -53,8 +53,8 @@ public class UpdateFrame extends JFrame {
     private Date date;
     private Transaction transaction;
     private JTabbedPane tabbedPane;
-    JPanel spendPanel;
-    JPanel incomePanel;
+  private  JPanel spendPanel;
+    private JPanel incomePanel;
     /**
      * Launch the application.
      * 
@@ -103,7 +103,7 @@ public class UpdateFrame extends JFrame {
      */
     public void init() {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setBounds(100, 100, 693, 514);
+        setBounds(100, 100, 850, 600);
         setLocationRelativeTo(parent);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -113,7 +113,7 @@ public class UpdateFrame extends JFrame {
 
         // 탭 생성
         tabbedPane = new JTabbedPane();
-        tabbedPane.setBounds(6, 6, 681, 474);
+        tabbedPane.setBounds(12, 10, 810, 541);
         contentPane.add(tabbedPane);
 
         // 지출 탭
@@ -123,32 +123,32 @@ public class UpdateFrame extends JFrame {
 
         lblDate = new JLabel("");
         lblDate.setHorizontalAlignment(SwingConstants.CENTER);
-        lblDate.setBounds(271, 29, 122, 38);
+        lblDate.setBounds(252, 10, 300, 80);
         spendPanel.add(lblDate);
 
         paymentamount = new JTextField();
-        paymentamount.setBounds(184, 79, 291, 72);
+        paymentamount.setBounds(122, 129, 560, 80);
         spendPanel.add(paymentamount);
         paymentamount.setColumns(10);
 
         category = new JComboBox<>();
-        category.setBounds(141, 163, 378, 62);
+        category.setBounds(122, 248, 560, 80);
         final DefaultComboBoxModel<String> paymentModel = new DefaultComboBoxModel<String>(PAYMENT_CATEGORIES);
         category.setModel(paymentModel);
         spendPanel.add(category);
 
         lblNote = new JLabel("Memo");
         lblNote.setHorizontalAlignment(SwingConstants.CENTER);
-        lblNote.setBounds(184, 237, 104, 62);
+        lblNote.setBounds(95, 368, 100, 80);
         spendPanel.add(lblNote);
 
         noteField = new JTextField();
-        noteField.setBounds(351, 237, 168, 62);
+        noteField.setBounds(290, 367, 420, 80);
         spendPanel.add(noteField);
         noteField.setColumns(10);
 
         btnBack = new JButton("<");
-        btnBack.setBounds(402, 393, 117, 29);
+        btnBack.setBounds(554, 477, 120, 30);
         btnBack.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 dispose();
@@ -157,7 +157,7 @@ public class UpdateFrame extends JFrame {
         spendPanel.add(btnBack);
 
         btnUpdate = new JButton("v");
-        btnUpdate.setBounds(537, 393, 117, 29);
+        btnUpdate.setBounds(682, 477, 120, 30);
         // btnAdd에 ActionListener 추가
         btnUpdate.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -195,16 +195,16 @@ public class UpdateFrame extends JFrame {
 
         lblDate_1 = new JLabel("");
         lblDate_1.setHorizontalAlignment(SwingConstants.CENTER);
-        lblDate_1.setBounds(269, 29, 122, 38);
+        lblDate_1.setBounds(252, 10, 300, 80);
         incomePanel.add(lblDate_1);
 
         income = new JTextField();
         income.setColumns(10);
-        income.setBounds(184, 79, 291, 72);
+        income.setBounds(122, 129, 560, 80);
         incomePanel.add(income);
 
         noteField_1 = new JButton("<");
-        noteField_1.setBounds(402, 393, 117, 29);
+        noteField_1.setBounds(547, 477, 120, 30);
         noteField_1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 dispose();
@@ -213,23 +213,23 @@ public class UpdateFrame extends JFrame {
         incomePanel.add(noteField_1);
 
         category_1 = new JComboBox<>();
-        category_1.setBounds(141, 163, 378, 62);
+        category_1.setBounds(122, 248, 560, 80);
         final DefaultComboBoxModel<String> incomeModel = new DefaultComboBoxModel<String>(INCOME_CATEGORIES);
         category_1.setModel(incomeModel);
         incomePanel.add(category_1);
 
         textField_1 = new JTextField();
         textField_1.setColumns(10);
-        textField_1.setBounds(351, 237, 168, 62);
+        textField_1.setBounds(290, 368, 420, 80);
         incomePanel.add(textField_1);
 
         lblMemo_1 = new JLabel("Memo");
         lblMemo_1.setHorizontalAlignment(SwingConstants.CENTER);
-        lblMemo_1.setBounds(184, 237, 104, 62);
+        lblMemo_1.setBounds(95, 367, 100, 80);
         incomePanel.add(lblMemo_1);
 
         btnUpdate_1 = new JButton("v");
-        btnUpdate_1.setBounds(537, 393, 117, 29);
+        btnUpdate_1.setBounds(682, 477, 120, 30);
         incomePanel.add(btnUpdate_1);
         btnUpdate_1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -264,5 +264,6 @@ public class UpdateFrame extends JFrame {
     public void setDate(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         lblDate.setText(sdf.format(date));
+        lblDate_1.setText(sdf.format(date));
     }
 }

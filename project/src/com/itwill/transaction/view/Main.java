@@ -22,10 +22,11 @@ import javax.swing.table.DefaultTableModel;
 import com.itwill.transaction.controller.TransactionDao;
 import com.itwill.transaction.model.Transaction;
 import com.itwill.transaction.view.AddFrame.AddNotify;
+import com.itwill.transaction.view.ChartFrame.ChartNotify;
 import com.itwill.transaction.view.UpdateFrame.UpdateNotify;
 import com.toedter.calendar.JCalendar;
 
-public class Main implements AddNotify, UpdateNotify {
+public class Main implements AddNotify, UpdateNotify, ChartNotify {
     private static final String[] COLUMN_NAMES = { "ID", "카테고리", "종류", "금액", "메모" };
 
     private JFrame frame;
@@ -39,6 +40,7 @@ public class Main implements AddNotify, UpdateNotify {
     private JScrollPane scrollPane;
     private AddFrame addFrame;
     private JButton deleteButton;
+    private JButton chartButton;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
@@ -131,6 +133,19 @@ public class Main implements AddNotify, UpdateNotify {
             }
         });
         scrollPane.setViewportView(detailsTable);
+        
+        chartButton = new JButton("➕");
+        chartButton.setFont(new Font("Dialog", Font.PLAIN, 20));
+        chartButton.setBounds(12, 10, 70, 70);
+        chartButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ChartFrame.showChartFrame(frame, Main.this);
+				
+			}
+		});
+        frame.getContentPane().add(chartButton);
 
     }
 
@@ -186,4 +201,10 @@ public class Main implements AddNotify, UpdateNotify {
         displayTransactionsForDate(selectedDate);
 
     }
+
+	@Override
+	public void chartshow() {
+		// TODO Auto-generated method stub
+		
+	}
 }
