@@ -21,103 +21,111 @@ import com.itwill.transaction.model.Transaction;
 import com.toedter.calendar.JCalendar;
 
 public class Main {
-	private static final String[] COLUMN_NAMES = { "카테고리", "종류", "금액" };
+    private static final String[] COLUMN_NAMES = { "카테고리", "종류", "금액" };
 
-	private JFrame frame;
-	private JCalendar calendar;
-	private JButton updateButton;
-	private JTable transactionsTable;
-	private TransactionDao transactionDao;
-	private JPanel detailsPanel;
-	private Date selectedDate;
-	private TransactionDao dao = TransactionDao.getInstance();
-	private JTable detailsTable;
-	private DefaultTableModel tableModel;
-	private JScrollPane scrollPane;
-	
+    private JFrame frame;
+    private JCalendar calendar;
+    private JButton updateButton;
+    private JTable transactionsTable;
+    private JPanel detailsPanel;
+    private Date selectedDate;
+    private TransactionDao dao = TransactionDao.getInstance();
+    private JTable detailsTable;
+    private DefaultTableModel tableModel;
+    private JScrollPane scrollPane;
+    private AddFrame addFrame;
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Main window = new Main();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    Main window = new Main();
+                    window.frame.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
-	public Main() {
-		initialize();
-		initTable();
-	}
+    public Main() {
+        initialize();
+        initTable();
+    }
 
-	private void initTable() {
-		List<Transaction> t = dao.read();
-		resetTableModel(t);
-	}
+    private void initTable() {
+        List<Transaction> t = dao.read();
+        resetTableModel(t);
+    }
 
-	private void initialize() {
-		frame = new JFrame();
-		frame.setTitle("Transaction Management");
-		frame.setBounds(100, 100, 850, 600);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setResizable(false);
-		frame.getContentPane().setLayout(null);
-		frame.setLocationRelativeTo(null);
+    private void initialize() {
+        frame = new JFrame();
+        frame.setTitle("Transaction Management");
+        frame.setBounds(100, 100, 850, 600);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
+        frame.getContentPane().setLayout(null);
+        frame.setLocationRelativeTo(null);
 
-		calendar = new JCalendar();
-		calendar.setBounds(125, 36, 600, 400);
-		frame.getContentPane().add(calendar);
+        calendar = new JCalendar();
+        calendar.setBounds(125, 36, 600, 400);
+        frame.getContentPane().add(calendar);
 
-		updateButton = new JButton("Update");
-		updateButton.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
-		updateButton.setBounds(750, 370, 70, 70);
-		updateButton.addActionListener(new ActionListener() {
+        updateButton = new JButton("Update");
+        updateButton.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
+        updateButton.setBounds(750, 370, 70, 70);
+        updateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (addFrame == null || !addFrame.isVisible()) {
+                    addFrame = new AddFrame(frame);
+                    addFrame.setVisible(true);
+                }
+            }
+        });
+        frame.getContentPane().add(updateButton);
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				AddFrame.showAddFrame(frame);
-			}
-		});
-		frame.getContentPane().add(updateButton);
+        detailsPanel = new JPanel();
+        detailsPanel.setLayout(new BorderLayout());
+        detailsPanel.setBounds(125, 448, 600, 112); // 위치와 크기 조정 필요
+        detailsPanel.setBorder(BorderFactory.createTitledBorder("Details"));
 
-		detailsPanel = new JPanel();
-		detailsPanel.setLayout(new BorderLayout());
-		detailsPanel.setBounds(125, 448, 600, 112); // 위치와 크기 조정 필요
-		detailsPanel.setBorder(BorderFactory.createTitledBorder("Details"));
+        frame.getContentPane().add(detailsPanel);
 
-		frame.getContentPane().add(detailsPanel);
+        scrollPane = new JScrollPane();
+        detailsPanel.add(scrollPane, BorderLayout.CENTER);
 
-		scrollPane = new JScrollPane();
-		detailsPanel.add(scrollPane, BorderLayout.CENTER);
+        detailsTable = new JTable();
+        tableModel = new DefaultTableModel(null, COLUMN_NAMES);
+        detailsTable.setModel(tableModel);
+        scrollPane.setViewportView(detailsTable);
 
-		detailsTable = new JTable();
-		tableModel = new DefaultTableModel(null, COLUMN_NAMES);
-		detailsTable.setModel(tableModel);
-		scrollPane.setViewportView(detailsTable);
+        calendar.addPropertyChangeListener("date", event -> {
+            if ("date".equals(event.getPropertyName())) {
+                selectedDate = calendar.getDate();
+                displayTransactionsForDate(selectedDate);
+                if (addFrame != null && addFrame.isVisible()) {
+                    EventQueue.invokeLater(() -> {
+                        addFrame.updateDateLabel(selectedDate);
+                    });
+                }
+            }
+        });
 
-		calendar.addPropertyChangeListener("calendar", event -> {
-			if ("calendar".equals(event.getPropertyName())) {
-				selectedDate = calendar.getDate();
-				displayTransactionsForDate(selectedDate);
-			}
-		});
+    }
 
-	}
-	private void displayTransactionsForDate(Date date) {
-		List<Transaction> transactions = dao.getTransactionsByDate(date);
-		resetTableModel(transactions);
-	}
-	private void resetTableModel(List<Transaction> transaction) {
-		tableModel = new DefaultTableModel(null, COLUMN_NAMES);
-		for (Transaction t : transaction) {
-			Object[] row = { t.getCategory(), t.getType(), t.getAmount() };
-			tableModel.addRow(row);
-		}
-		detailsTable.setModel(tableModel);
-	}
+    private void displayTransactionsForDate(Date date) {
+        List<Transaction> transactions = dao.getTransactionsByDate(date);
+        resetTableModel(transactions);
+    }
+
+    private void resetTableModel(List<Transaction> transaction) {
+        tableModel = new DefaultTableModel(null, COLUMN_NAMES);
+        for (Transaction t : transaction) {
+            Object[] row = { t.getCategory(), t.getType(), t.getAmount() };
+            tableModel.addRow(row);
+        }
+        detailsTable.setModel(tableModel);
+    }
 
 }

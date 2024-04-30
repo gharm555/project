@@ -21,6 +21,10 @@ public class Transaction {
 	private double amount;
 	private String notes;
 
+	public Transaction() {
+
+	}
+
 	public Transaction(int id, String type, String category, java.util.Date date, String notes) {
 		super();
 		this.id = id;
@@ -80,7 +84,7 @@ public class Transaction {
 
 	@Override
 	public String toString() {
-		return "Transaction [id=" + id + ", type=" + type + ", category=" + category + ", date=" + date	 + ", amount="
+		return "Transaction [id=" + id + ", type=" + type + ", category=" + category + ", date=" + date + ", amount="
 				+ amount + ", notes=" + notes + "]";
 	}
 
