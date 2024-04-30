@@ -6,9 +6,7 @@ import java.util.Date;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
 import com.itwill.transaction.controller.TransactionDao;
@@ -54,7 +52,9 @@ public class UpdateFrame extends JFrame {
     private UpdateNotify app;
     private Date date;
     private Transaction transaction;
-
+    private JTabbedPane tabbedPane;
+    JPanel spendPanel;
+    JPanel incomePanel;
     /**
      * Launch the application.
      * 
@@ -81,8 +81,23 @@ public class UpdateFrame extends JFrame {
         this.date = date;
         init();
         setDate(date);
+        populateFields(transaction);
     }
-
+    private void populateFields(Transaction transaction) {
+        if (transaction != null) {
+            if(transaction.getType().equals("지출")){
+            paymentamount.setText(String.valueOf(transaction.getAmount()));
+            category.setSelectedItem(transaction.getCategory());
+            noteField.setText(transaction.getNotes());}
+            else{
+                tabbedPane.setSelectedIndex(1);
+                income.setText(String.valueOf(transaction.getAmount()));
+                category_1.setSelectedItem(transaction.getCategory());
+                textField_1.setText(transaction.getNotes());
+            }
+            // 날짜 설정, 다른 필드가 있다면 여기에 추가
+        }
+    }
     /**
      * Create the frame.
      */
@@ -97,12 +112,12 @@ public class UpdateFrame extends JFrame {
         contentPane.setLayout(null);
 
         // 탭 생성
-        JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane = new JTabbedPane();
         tabbedPane.setBounds(6, 6, 681, 474);
         contentPane.add(tabbedPane);
 
         // 지출 탭
-        JPanel spendPanel = new JPanel();
+        spendPanel = new JPanel();
         spendPanel.setLayout(null);
         tabbedPane.addTab("지출", spendPanel);
 
@@ -146,17 +161,20 @@ public class UpdateFrame extends JFrame {
         // btnAdd에 ActionListener 추가
         btnUpdate.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                try {
+                try { 
+                    int newAmount = Integer.parseInt(paymentamount.getText().trim());
+                    String newCategory = (String) category.getSelectedItem();
+                    String newNotes = noteField.getText().trim();
+                    
+                    transaction.setType("지출");
+                    transaction.setAmount(newAmount);
+                    transaction.setCategory(newCategory);
+                    transaction.setNotes(newNotes);
 
-                    transaction.setType(transaction.getType());
-                    transaction.setAmount(transaction.getAmount());
-                    transaction.setCategory(transaction.getCategory());
-                    transaction.setNotes(transaction.getNotes());
-                    transaction.setDate(transaction.getDate());
                     dao.update(transaction);
 
                     // 성공 메시지
-                    JOptionPane.showMessageDialog(null, "지출이 성공적으로 수정되었습니다.");
+                    JOptionPane.showMessageDialog(null, "수정이 완료되었습니다.");
                     dispose(); // 창 닫기
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null, "금액은 숫자로 입력해야 합니다.");
@@ -165,13 +183,13 @@ public class UpdateFrame extends JFrame {
                     ex.printStackTrace();
                 }
                 app.UpdateSuccess();
-                dispose();
+                
             }
         });
         spendPanel.add(btnUpdate);
 
         // 수입 탭
-        JPanel incomePanel = new JPanel();
+        incomePanel = new JPanel();
         incomePanel.setLayout(null);
         tabbedPane.addTab("수입", incomePanel);
 
@@ -217,26 +235,18 @@ public class UpdateFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 try {
                     // 입력 데이터 추출 및 검증
-                    String amountText = income.getText().trim();
-                    if (amountText.isEmpty()) {
-                        JOptionPane.showMessageDialog(null, "금액을 입력해주세요.");
-                        return;
-                    }
-                    int amount = Integer.parseInt(amountText);
-                    String categorySelected = (String) category_1.getSelectedItem();
-                    String noteText = textField_1.getText().trim();
-
-                    // 데이터베이스 업데이트 로직
-                    Transaction transaction = new Transaction();
+                    int newAmount = Integer.parseInt(paymentamount.getText().trim());
+                    String newCategory = (String) category.getSelectedItem();
+                    String newNotes = noteField.getText().trim();
+        
                     transaction.setType("수입");
-                    transaction.setAmount(amount);
-                    transaction.setCategory(categorySelected);
-                    transaction.setNotes(noteText);
-                    transaction.setDate(date);
+                    transaction.setAmount(newAmount);
+                    transaction.setCategory(newCategory);
+                    transaction.setNotes(newNotes);
                     dao.update(transaction);
 
                     // 성공 메시지
-                    JOptionPane.showMessageDialog(null, "수입이 성공적으로 수정되었습니다.");
+                    JOptionPane.showMessageDialog(null, "수정이 완료되었습니다.");
                     dispose(); // 창 닫기
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null, "금액은 숫자로 입력해야 합니다.");
@@ -245,7 +255,7 @@ public class UpdateFrame extends JFrame {
                     ex.printStackTrace();
                 }
                 app.UpdateSuccess();
-                dispose();
+                
             }
         });
 
