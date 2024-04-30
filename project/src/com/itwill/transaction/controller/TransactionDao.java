@@ -122,7 +122,6 @@ public class TransactionDao {
 		String notes = rs.getString(COL_NOTES);
 
 		Transaction t = new Transaction(id, type, category, date, amount, notes);
-		System.out.println(t.getAmount());
 		return t;
 	}
 
