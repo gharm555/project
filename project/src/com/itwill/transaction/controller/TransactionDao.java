@@ -154,4 +154,29 @@ public class TransactionDao {
 		return transactions;
 	}
 
+	public void update(Transaction transaction) {
+
+	}
+
+	public static final String SQL_DELETE = String.format("delete from %s where %s = ?", TBL_Transaction, COL_ID);
+
+	public int delete(Integer id) {
+		int result = 0;
+
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		try {
+			conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			stmt = conn.prepareStatement(SQL_DELETE);
+			stmt.setInt(1, id);
+			result = stmt.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeResources(conn, stmt);
+		}
+
+		return result;
+	}
 }
