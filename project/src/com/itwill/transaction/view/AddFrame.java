@@ -36,10 +36,10 @@ public class AddFrame extends JFrame {
     private JButton btnBack;
     private JButton btnAdd;
     private JLabel lblDate_1;
-    private JTextField textField;
+    private JTextField income;
     private JComboBox category_1;
     private JLabel lblMemo_1;
-    private JButton btnBack_1;
+    private JButton noteField_1;
     private JButton btnAdd_1;
     private JTextField paymentamount;
     private JTextField noteField;
@@ -176,33 +176,33 @@ public class AddFrame extends JFrame {
         lblDate_1.setBounds(269, 29, 122, 38);
         incomePanel.add(lblDate_1);
 
-        textField = new JTextField();
-        textField.setColumns(10);
-        textField.setBounds(184, 79, 291, 72);
-        incomePanel.add(textField);
+        income = new JTextField();
+        income.setColumns(10);
+        income.setBounds(184, 79, 291, 72);
+        incomePanel.add(income);
+        
+                noteField_1 = new JButton("<");
+                noteField_1.setBounds(402, 393, 117, 29);
+                noteField_1.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        dispose();
+                    }
+                });
+                incomePanel.add(noteField_1);
 
         category_1 = new JComboBox();
         category_1.setBounds(141, 163, 378, 62);
         incomePanel.add(category_1);
 
-        lblMemo_1 = new JLabel("Memo");
-        lblMemo_1.setHorizontalAlignment(SwingConstants.CENTER);
-        lblMemo_1.setBounds(184, 237, 104, 62);
-        incomePanel.add(lblMemo_1);
-
         textField_1 = new JTextField();
         textField_1.setColumns(10);
         textField_1.setBounds(351, 237, 168, 62);
         incomePanel.add(textField_1);
-
-        btnBack_1 = new JButton("<");
-        btnBack_1.setBounds(402, 393, 117, 29);
-        btnBack_1.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
-        incomePanel.add(btnBack_1);
+        
+                lblMemo_1 = new JLabel("Memo");
+                lblMemo_1.setHorizontalAlignment(SwingConstants.CENTER);
+                lblMemo_1.setBounds(184, 237, 104, 62);
+                incomePanel.add(lblMemo_1);
 
         btnAdd_1 = new JButton("v");
         btnAdd_1.setBounds(537, 393, 117, 29);
