@@ -154,7 +154,31 @@ public class TransactionDao {
 	}
 
 	public void update(Transaction transaction) {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		try {
+			conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			String sql = String.format("UPDATE %s SET %s = ?, %s = ?, %s = ?, %s = ?, %s = ? WHERE %s = ?",
+					TBL_Transaction, COL_TYPE, COL_CATEGORY, COL_AMOUNT, COL_TRANSACTION_DATE, COL_NOTES, COL_ID);
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, transaction.getType());
+			stmt.setString(2, transaction.getCategory());
+			stmt.setInt(3, transaction.getAmount());
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String formattedDate = sdf.format(transaction.getDate());
+			stmt.setString(4, formattedDate);
+			stmt.setString(5, transaction.getNotes());
+			stmt.setInt(6, transaction.getId());
 
+			int affectedRows = stmt.executeUpdate();
+			if (affectedRows == 0) {
+				throw new SQLException("Updating transaction failed, no rows affected.");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			closeResources(conn, stmt);
+		}
 	}
 
 	public static final String SQL_DELETE = String.format("delete from %s where %s = ?", TBL_Transaction, COL_ID);
@@ -177,5 +201,30 @@ public class TransactionDao {
 		}
 
 		return result;
+	}
+
+	public static final String SQL_SELECT_BY_ID = String.format("select * from %s where %s = ?", TBL_Transaction,
+			COL_ID);
+
+	public Transaction read(int id) {
+		Transaction transaction = null;
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		try {
+			conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			stmt = conn.prepareStatement(SQL_SELECT_BY_ID);
+			stmt.setInt(1, id);
+			rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				transaction = makeTransactionFromResultSet(rs);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			closeResources(conn, stmt, rs);
+		}
+		return transaction;
 	}
 }

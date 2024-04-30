@@ -42,17 +42,18 @@ public class UpdateFrame extends JFrame {
     private JComboBox<String> category;
     private JLabel lblNote;
     private JButton btnBack;
-    private JButton btnAdd;
+    private JButton btnUpdate;
     private JLabel lblDate_1;
     private JTextField income;
     private JComboBox<String> category_1;
     private JLabel lblMemo_1;
     private JButton noteField_1;
-    private JButton btnAdd_1;
+    private JButton btnUpdate_1;
     private JTextField paymentamount;
     private JTextField noteField;
     private UpdateNotify app;
     private Date date;
+    private Transaction transaction;
 
     /**
      * Launch the application.
@@ -60,11 +61,11 @@ public class UpdateFrame extends JFrame {
      * @param main
      * @param frame
      */
-    public static void showUpdateFrame(Component parent, UpdateNotify app, Date date) {
+    public static void showUpdateFrame(Component parent, UpdateNotify app, Transaction transaction, Date date) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                	UpdateFrame frame = new UpdateFrame(parent, app, date);
+                    UpdateFrame frame = new UpdateFrame(parent, app, transaction, date);
                     frame.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -73,9 +74,10 @@ public class UpdateFrame extends JFrame {
         });
     }
 
-    public UpdateFrame(Component parent, UpdateNotify app, Date date) {
+    public UpdateFrame(Component parent, UpdateNotify app, Transaction transaction, Date date) {
         this.parent = parent;
         this.app = app;
+        this.transaction = transaction;
         this.date = date;
         init();
         setDate(date);
@@ -139,45 +141,34 @@ public class UpdateFrame extends JFrame {
         });
         spendPanel.add(btnBack);
 
-        btnAdd = new JButton("v");
-        btnAdd.setBounds(537, 393, 117, 29);
+        btnUpdate = new JButton("v");
+        btnUpdate.setBounds(537, 393, 117, 29);
         // btnAdd에 ActionListener 추가
-        btnAdd.addActionListener(new ActionListener() {
+        btnUpdate.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // 입력 데이터 추출
-                String amountText = paymentamount.getText().trim();
-                String categorySelected = (String) category.getSelectedItem();
-                String noteText = noteField.getText().trim();
-
-                // 데이터 검증
-                if (amountText.isEmpty() || categorySelected == null) {
-                    JOptionPane.showMessageDialog(null, "금액을 입력해주세요.");
-                    return;
-                }
-
-                // 데이터베이스에 저장
                 try {
-                    Transaction transaction = new Transaction();
-                    transaction.setType("지출");
-                    amountText = paymentamount.getText().trim();
-                    int amount = Integer.parseInt(amountText);
-                    transaction.setAmount(amount);
-                    transaction.setCategory(categorySelected);
-                    transaction.setNotes(noteText);
-                    transaction.setDate(date); // 현재 날짜 사용, 필요에 따라 다른 날짜 지정 가능
-                    System.out.println(date);
 
-                    dao.create(transaction); // TransactionDao의 create 메소드를 호출하여 데이터 저장
-                    JOptionPane.showMessageDialog(null, "지출이 성공적으로 추가되었습니다.");
+                    transaction.setType(transaction.getType());
+                    transaction.setAmount(transaction.getAmount());
+                    transaction.setCategory(transaction.getCategory());
+                    transaction.setNotes(transaction.getNotes());
+                    transaction.setDate(transaction.getDate());
+                    dao.update(transaction);
+
+                    // 성공 메시지
+                    JOptionPane.showMessageDialog(null, "지출이 성공적으로 수정되었습니다.");
+                    dispose(); // 창 닫기
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "금액은 숫자로 입력해야 합니다.");
                 } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "데이터 저장 중 오류가 발생했습니다.");
+                    JOptionPane.showMessageDialog(null, "업데이트 중 오류가 발생했습니다.");
                     ex.printStackTrace();
                 }
                 app.UpdateSuccess();
                 dispose();
             }
         });
-        spendPanel.add(btnAdd);
+        spendPanel.add(btnUpdate);
 
         // 수입 탭
         JPanel incomePanel = new JPanel();
@@ -219,37 +210,38 @@ public class UpdateFrame extends JFrame {
         lblMemo_1.setBounds(184, 237, 104, 62);
         incomePanel.add(lblMemo_1);
 
-        btnAdd_1 = new JButton("v");
-        btnAdd_1.setBounds(537, 393, 117, 29);
-        incomePanel.add(btnAdd_1);
-        btnAdd_1.addActionListener(new ActionListener() {
+        btnUpdate_1 = new JButton("v");
+        btnUpdate_1.setBounds(537, 393, 117, 29);
+        incomePanel.add(btnUpdate_1);
+        btnUpdate_1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // 입력 데이터 추출
-                String amountText = income.getText().trim();
-                String categorySelected = (String) category_1.getSelectedItem();
-                String noteText = textField_1.getText().trim();
-
-                // 데이터 검증
-                if (amountText.isEmpty() || categorySelected == null) {
-                    JOptionPane.showMessageDialog(null, "금액을 입력해주세요.");
-                    return;
-                }
-
-                // 데이터베이스에 저장
                 try {
+                    // 입력 데이터 추출 및 검증
+                    String amountText = income.getText().trim();
+                    if (amountText.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "금액을 입력해주세요.");
+                        return;
+                    }
+                    int amount = Integer.parseInt(amountText);
+                    String categorySelected = (String) category_1.getSelectedItem();
+                    String noteText = textField_1.getText().trim();
+
+                    // 데이터베이스 업데이트 로직
                     Transaction transaction = new Transaction();
                     transaction.setType("수입");
-                    amountText = income.getText().trim();
-                    int amount = Integer.parseInt(amountText);
                     transaction.setAmount(amount);
                     transaction.setCategory(categorySelected);
                     transaction.setNotes(noteText);
-                    transaction.setDate(date); // 현재 날짜 사용, 필요에 따라 다른 날짜 지정 가능
+                    transaction.setDate(date);
+                    dao.update(transaction);
 
-                    dao.create(transaction); // TransactionDao의 create 메소드를 호출하여 데이터 저장
-                    JOptionPane.showMessageDialog(null, "수입이 성공적으로 추가되었습니다.");
+                    // 성공 메시지
+                    JOptionPane.showMessageDialog(null, "수입이 성공적으로 수정되었습니다.");
+                    dispose(); // 창 닫기
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "금액은 숫자로 입력해야 합니다.");
                 } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "데이터 저장 중 오류가 발생했습니다.");
+                    JOptionPane.showMessageDialog(null, "업데이트 중 오류가 발생했습니다.");
                     ex.printStackTrace();
                 }
                 app.UpdateSuccess();

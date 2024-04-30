@@ -25,7 +25,7 @@ import com.itwill.transaction.view.AddFrame.AddNotify;
 import com.itwill.transaction.view.UpdateFrame.UpdateNotify;
 import com.toedter.calendar.JCalendar;
 
-public class Main implements AddNotify,UpdateNotify {
+public class Main implements AddNotify, UpdateNotify {
     private static final String[] COLUMN_NAMES = { "ID", "카테고리", "종류", "금액", "메모" };
 
     private JFrame frame;
@@ -118,16 +118,18 @@ public class Main implements AddNotify,UpdateNotify {
         tableModel = new DefaultTableModel(null, COLUMN_NAMES);
         detailsTable.setModel(tableModel);
         detailsTable.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseClicked(MouseEvent e) {
-        		if(e.getClickCount() == 2) {
-        			int rowIndex = detailsTable.rowAtPoint(e.getPoint());
-        			if (rowIndex != -1) {
-        				UpdateFrame.showUpdateFrame(addFrame, null, selectedDate);
-        			}
-        		}
-        	}
-		});
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    int rowIndex = detailsTable.getSelectedRow();
+                    if (rowIndex != -1) {
+                        int id = Integer.parseInt(tableModel.getValueAt(rowIndex, 0).toString());
+                        Transaction transaction = dao.read(id);
+                        UpdateFrame.showUpdateFrame(addFrame, Main.this, transaction, selectedDate);
+                    }
+                }
+            }
+        });
         scrollPane.setViewportView(detailsTable);
 
     }
@@ -139,7 +141,11 @@ public class Main implements AddNotify,UpdateNotify {
 
     private void resetTableModel(List<Transaction> transaction) {
 
-        tableModel = new DefaultTableModel(null, COLUMN_NAMES);
+        tableModel = new DefaultTableModel(null, COLUMN_NAMES) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         for (Transaction t : transaction) {
             Object[] row = { t.getId(), t.getCategory(), t.getType(), t.getAmount(), t.getNotes() };
             tableModel.addRow(row);
@@ -169,15 +175,15 @@ public class Main implements AddNotify,UpdateNotify {
         }
 
     }
-    
+
     @Override
     public void addSuccess() {
         displayTransactionsForDate(selectedDate);
     }
 
-	@Override
-	public void UpdateSuccess() {
-		displayTransactionsForDate(selectedDate);
-		
-	}
+    @Override
+    public void UpdateSuccess() {
+        displayTransactionsForDate(selectedDate);
+
+    }
 }
