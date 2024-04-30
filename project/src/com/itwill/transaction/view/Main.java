@@ -23,7 +23,7 @@ import com.itwill.transaction.view.AddFrame.AddNotify;
 import com.toedter.calendar.JCalendar;
 
 public class Main implements AddNotify {
-    private static final String[] COLUMN_NAMES = { "카테고리", "종류", "금액", "메모" };
+    private static final String[] COLUMN_NAMES = { "ID", "카테고리", "종류", "금액", "메모" };
 
     private JFrame frame;
     private JCalendar calendar;
@@ -94,7 +94,7 @@ public class Main implements AddNotify {
             }
         });
         frame.getContentPane().add(updateButton);
-        
+
         deleteButton = new JButton("🗑️");
         deleteButton.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
         deleteButton.setBounds(750, 452, 70, 70);
@@ -127,33 +127,34 @@ public class Main implements AddNotify {
 
         tableModel = new DefaultTableModel(null, COLUMN_NAMES);
         for (Transaction t : transaction) {
-            Object[] row = { t.getCategory(), t.getType(), t.getAmount(), t.getNotes() };
+            Object[] row = { t.getId(), t.getCategory(), t.getType(), t.getAmount(), t.getNotes() };
             tableModel.addRow(row);
         }
         detailsTable.setModel(tableModel);
     }
+
     public void delete() {
         // 테이블에서 선택된 행의 인덱스
         int index = detailsTable.getSelectedRow();
         if (index == -1) {
-          JOptionPane.showMessageDialog(frame, "행을 선택하세요", "오류", 2);
-          return;
+            JOptionPane.showMessageDialog(frame, "행을 선택하세요", "오류", 2);
+            return;
         } else {
-          int confirm = JOptionPane.showConfirmDialog(frame, "정말 삭제할까요?", "삭제", JOptionPane.YES_NO_OPTION,
-              JOptionPane.QUESTION_MESSAGE);
-          if (confirm == JOptionPane.YES_OPTION) {
-            Integer id = (Integer) tableModel.getValueAt(index, 0);
-            int result = dao.delete(id);
-            if (result == 1) {
-              JOptionPane.showMessageDialog(frame, "삭제 성공");
-              displayTransactionsForDate(selectedDate);
-            } else {
-              JOptionPane.showMessageDialog(frame, "삭제 실패", "삭제", 0);
+            int confirm = JOptionPane.showConfirmDialog(frame, "정말 삭제할까요?", "삭제", JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
+            if (confirm == JOptionPane.YES_OPTION) {
+                Integer id = (Integer) tableModel.getValueAt(index, 0);
+                int result = dao.delete(id);
+                if (result == 1) {
+                    JOptionPane.showMessageDialog(frame, "삭제 성공");
+                    displayTransactionsForDate(selectedDate);
+                } else {
+                    JOptionPane.showMessageDialog(frame, "삭제 실패", "삭제", 0);
+                }
             }
-          }
         }
 
-      }
+    }
 
     @Override
     public void addSuccess() {
