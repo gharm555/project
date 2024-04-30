@@ -25,9 +25,9 @@ import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.awt.event.ActionEvent;
 
-public class AddFrame extends JFrame {
-    public interface AddNotify {
-        void addSuccess();
+public class UpdateFrame extends JFrame {
+    public interface UpdateNotify {
+        void UpdateSuccess();
     }
 
     private static final String[] PAYMENT_CATEGORIES = { "식비", "교통비", "공과금", "의료비", "문화생활", "생필품", "교육", "구독비", "통신비",
@@ -51,7 +51,7 @@ public class AddFrame extends JFrame {
     private JButton btnAdd_1;
     private JTextField paymentamount;
     private JTextField noteField;
-    private AddNotify app;
+    private UpdateNotify app;
     private Date date;
 
     /**
@@ -60,11 +60,11 @@ public class AddFrame extends JFrame {
      * @param main
      * @param frame
      */
-    public static void showAddFrame(Component parent, AddNotify app, Date date) {
+    public static void showUpdateFrame(Component parent, UpdateNotify app, Date date) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    AddFrame frame = new AddFrame(parent, app, date);
+                	UpdateFrame frame = new UpdateFrame(parent, app, date);
                     frame.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -73,7 +73,7 @@ public class AddFrame extends JFrame {
         });
     }
 
-    public AddFrame(Component parent, AddNotify app, Date date) {
+    public UpdateFrame(Component parent, UpdateNotify app, Date date) {
         this.parent = parent;
         this.app = app;
         this.date = date;
@@ -173,7 +173,7 @@ public class AddFrame extends JFrame {
                     JOptionPane.showMessageDialog(null, "데이터 저장 중 오류가 발생했습니다.");
                     ex.printStackTrace();
                 }
-                app.addSuccess();
+                app.UpdateSuccess();
                 dispose();
             }
         });
@@ -252,7 +252,7 @@ public class AddFrame extends JFrame {
                     JOptionPane.showMessageDialog(null, "데이터 저장 중 오류가 발생했습니다.");
                     ex.printStackTrace();
                 }
-                app.addSuccess();
+                app.UpdateSuccess();
                 dispose();
             }
         });

@@ -5,6 +5,8 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Date;
 import java.util.List;
 
@@ -20,9 +22,10 @@ import javax.swing.table.DefaultTableModel;
 import com.itwill.transaction.controller.TransactionDao;
 import com.itwill.transaction.model.Transaction;
 import com.itwill.transaction.view.AddFrame.AddNotify;
+import com.itwill.transaction.view.UpdateFrame.UpdateNotify;
 import com.toedter.calendar.JCalendar;
 
-public class Main implements AddNotify {
+public class Main implements AddNotify,UpdateNotify {
     private static final String[] COLUMN_NAMES = { "ID", "카테고리", "종류", "금액", "메모" };
 
     private JFrame frame;
@@ -114,6 +117,17 @@ public class Main implements AddNotify {
         detailsTable = new JTable();
         tableModel = new DefaultTableModel(null, COLUMN_NAMES);
         detailsTable.setModel(tableModel);
+        detailsTable.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+        		if(e.getClickCount() == 2) {
+        			int rowIndex = detailsTable.rowAtPoint(e.getPoint());
+        			if (rowIndex != -1) {
+        				UpdateFrame.showUpdateFrame(addFrame, null, selectedDate);
+        			}
+        		}
+        	}
+		});
         scrollPane.setViewportView(detailsTable);
 
     }
@@ -155,9 +169,15 @@ public class Main implements AddNotify {
         }
 
     }
-
+    
     @Override
     public void addSuccess() {
         displayTransactionsForDate(selectedDate);
     }
+
+	@Override
+	public void UpdateSuccess() {
+		displayTransactionsForDate(selectedDate);
+		
+	}
 }
