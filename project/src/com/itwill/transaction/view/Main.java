@@ -5,14 +5,13 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.Date;
 import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -29,7 +28,6 @@ public class Main implements AddNotify {
     private JFrame frame;
     private JCalendar calendar;
     private JButton updateButton;
-    private JTable transactionsTable;
     private JPanel detailsPanel;
     private Date selectedDate;
     private TransactionDao dao = TransactionDao.getInstance();
@@ -37,6 +35,7 @@ public class Main implements AddNotify {
     private DefaultTableModel tableModel;
     private JScrollPane scrollPane;
     private AddFrame addFrame;
+    private JButton deleteButton;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
@@ -84,7 +83,7 @@ public class Main implements AddNotify {
             }
         });
 
-        updateButton = new JButton("Update");
+        updateButton = new JButton("➕");
         updateButton.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
         updateButton.setBounds(750, 370, 70, 70);
         updateButton.addActionListener(new ActionListener() {
@@ -95,6 +94,12 @@ public class Main implements AddNotify {
             }
         });
         frame.getContentPane().add(updateButton);
+        
+        deleteButton = new JButton("🗑️");
+        deleteButton.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
+        deleteButton.setBounds(750, 452, 70, 70);
+        deleteButton.addActionListener(e -> delete());
+        frame.getContentPane().add(deleteButton);
 
         detailsPanel = new JPanel();
         detailsPanel.setLayout(new BorderLayout());
@@ -127,6 +132,28 @@ public class Main implements AddNotify {
         }
         detailsTable.setModel(tableModel);
     }
+    public void delete() {
+        // 테이블에서 선택된 행의 인덱스
+        int index = detailsTable.getSelectedRow();
+        if (index == -1) {
+          JOptionPane.showMessageDialog(frame, "행을 선택하세요", "오류", 2);
+          return;
+        } else {
+          int confirm = JOptionPane.showConfirmDialog(frame, "정말 삭제할까요?", "삭제", JOptionPane.YES_NO_OPTION,
+              JOptionPane.QUESTION_MESSAGE);
+          if (confirm == JOptionPane.YES_OPTION) {
+            Integer id = (Integer) tableModel.getValueAt(index, 0);
+            int result = dao.delete(id);
+            if (result == 1) {
+              JOptionPane.showMessageDialog(frame, "삭제 성공");
+              displayTransactionsForDate(selectedDate);
+            } else {
+              JOptionPane.showMessageDialog(frame, "삭제 실패", "삭제", 0);
+            }
+          }
+        }
+
+      }
 
     @Override
     public void addSuccess() {
