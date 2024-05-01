@@ -3,23 +3,16 @@ package com.itwill.transaction.view;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.EventQueue;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.border.EmptyBorder;
 import java.util.Map;
 import com.itwill.transaction.controller.TransactionDao;
-import javax.swing.JComboBox;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
-import java.util.Calendar;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 
 public class ChartFrame extends JFrame {
 	public interface ChartNotify {
@@ -31,14 +24,9 @@ public class ChartFrame extends JFrame {
 	private JTabbedPane tabbedPane;
 	private JPanel spendPanel;
 	private JPanel incomePanel;
-	private JComboBox<String> periodComboBox;
 	private Component parent;
 	private ChartNotify app;
 	private TransactionDao dao;
-	private JButton prevButton, nextButton;
-	private JLabel yearLabel;
-	private int currentYear;
-	private Calendar calendar;
 
 	/**
 	 * Launch the application.
@@ -84,41 +72,6 @@ public class ChartFrame extends JFrame {
 		tabbedPane.addTab("지출", spendPanel);
 		spendPanel.setLayout(null);
 
-		String[] periods = { "월별", "년별" };
-		periodComboBox = new JComboBox<>(periods);
-		periodComboBox.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				updateChartDisplay();
-			}
-		});
-		// 년도 및 버튼 설정
-		calendar = Calendar.getInstance();
-		currentYear = calendar.get(Calendar.YEAR);
-
-		yearLabel = new JLabel(String.valueOf(currentYear));
-		prevButton = new JButton("<");
-		nextButton = new JButton(">");
-
-		prevButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				adjustCalendar(-1);
-			}
-		});
-
-		nextButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				adjustCalendar(1);
-			}
-		});
-
-		// 컴포넌트 배치
-		add(periodComboBox, BorderLayout.NORTH);
-		add(prevButton, BorderLayout.WEST);
-		add(yearLabel, BorderLayout.CENTER);
-		add(nextButton, BorderLayout.EAST);
 		// 원형 그래프 생성
 		DefaultPieDataset spendDataset = new DefaultPieDataset();
 		spendDataset.setValue("One", new Double(43.2));
@@ -179,22 +132,4 @@ public class ChartFrame extends JFrame {
 		panel.validate();
 	}
 
-	private void adjustCalendar(int amount) {
-		if (periodComboBox.getSelectedItem().equals("월별")) {
-			calendar.add(Calendar.MONTH, amount);
-		} else {
-			calendar.add(Calendar.YEAR, amount);
-		}
-		currentYear = calendar.get(Calendar.YEAR);
-		yearLabel.setText(String.valueOf(currentYear));
-		loadChartData();
-	}
-
-	private void updateChartDisplay() {
-		loadChartData();
-	}
-
-	private void loadChartData1() {
-		// 데이터 로딩 로직 (월별 또는 년별 데이터 로드)
-	}
 }
