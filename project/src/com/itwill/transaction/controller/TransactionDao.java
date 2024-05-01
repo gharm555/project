@@ -230,8 +230,8 @@ public class TransactionDao {
 		return transaction;
 	}
 
-	public Map<String, Double> getSumByCategory(String type) {
-		Map<String, Double> results = new HashMap<>();
+	public Map<String, Integer> getSumByCategory(String type) {
+		Map<String, Integer> results = new HashMap<>();
 		String sql = String.format("SELECT %s, SUM(%s) AS total FROM %s WHERE %s = ? GROUP BY %s", COL_CATEGORY,
 				COL_AMOUNT, TBL_Transaction, COL_TYPE, COL_CATEGORY);
 		try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
@@ -240,7 +240,7 @@ public class TransactionDao {
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				String category = rs.getString("category");
-				double total = rs.getDouble("total");
+				Integer total = rs.getInt("total");
 				results.put(category, total);
 			}
 		} catch (SQLException e) {
@@ -248,28 +248,39 @@ public class TransactionDao {
 		}
 		return results;
 	}
-
-	public Map<String, Double> getMonthlySumByCategory(String type, int year) {
-		Map<String, Double> results = new HashMap<>();
-		String sql = String.format(
-				"SELECT EXTRACT(MONTH FROM %s) AS month, %s, SUM(%s) AS total FROM %s WHERE %s = ? AND EXTRACT(YEAR FROM %s) = ? GROUP BY EXTRACT(MONTH FROM %s), %s",
-				COL_TRANSACTION_DATE, COL_CATEGORY, COL_AMOUNT, TBL_Transaction, COL_TYPE, COL_TRANSACTION_DATE,
-				COL_CATEGORY);
-		try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-				PreparedStatement stmt = conn.prepareStatement(sql)) {
-			stmt.setString(1, type);
-			stmt.setInt(2, year);
-			ResultSet rs = stmt.executeQuery();
-			while (rs.next()) {
-				String month = rs.getString("month");
-				String category = rs.getString("category");
-				double total = rs.getDouble("total");
-				String key = month + "월 - " + category;
-				results.put(key, total);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return results;
+	public Map<String, Integer> getSumByYear() {
+	    Map<String, Integer> results = new HashMap<>();
+	    String sql = "SELECT EXTRACT(YEAR FROM TransactionDate) AS year, SUM(Amount) AS total FROM Transactions GROUP BY EXTRACT(YEAR FROM TransactionDate)";
+	    try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+	         PreparedStatement stmt = conn.prepareStatement(sql);
+	         ResultSet rs = stmt.executeQuery()) {
+	        while (rs.next()) {
+	            String year = String.valueOf(rs.getInt("year"));
+	            Integer total = rs.getInt("total");
+	            results.put(year, total);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return results;
 	}
+
+	public Map<String, Integer> getSumByMonth() {
+	    Map<String, Integer> results = new HashMap<>();
+	    String sql = "SELECT EXTRACT(MONTH FROM TransactionDate) AS month, SUM(Amount) AS total FROM Transactions GROUP BY EXTRACT(MONTH FROM TransactionDate)";
+	    try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+	         PreparedStatement stmt = conn.prepareStatement(sql);
+	         ResultSet rs = stmt.executeQuery()) {
+	        while (rs.next()) {
+	            String month = String.format("%02d", rs.getInt("month")); // 월을 두 자리 숫자로 포맷
+	            Integer total = rs.getInt("total");
+	            results.put(month, total);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return results;
+	}
+
+	
 }

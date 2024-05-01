@@ -3,16 +3,22 @@ package com.itwill.transaction.view;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Map;
+
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.border.EmptyBorder;
-import java.util.Map;
-import com.itwill.transaction.controller.TransactionDao;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
+
+import com.itwill.transaction.controller.TransactionDao;
 
 public class ChartFrame extends JFrame {
 	public interface ChartNotify {
@@ -27,7 +33,7 @@ public class ChartFrame extends JFrame {
 	private Component parent;
 	private ChartNotify app;
 	private TransactionDao dao;
-
+	private JComboBox<String> viewModeComboBox;
 	/**
 	 * Launch the application.
 	 */
@@ -49,9 +55,39 @@ public class ChartFrame extends JFrame {
 		this.app = app;
 		this.dao = dao;
 		init();
-		loadChartData();
+		loadChartData("월별");
 	}
+	 private void initComboBox() {
+	        String[] viewModes = {"월별", "연도별"};
+	        viewModeComboBox = new JComboBox<>(viewModes);
+	        viewModeComboBox.setBounds(12, 10, 150, 30); // 적절한 위치 설정 필요
+	        contentPane.add(viewModeComboBox);
 
+	        viewModeComboBox.addActionListener(new ActionListener() {
+	            @Override
+	            public void actionPerformed(ActionEvent e) {
+	                String selectedMode = (String) viewModeComboBox.getSelectedItem();
+	                loadChartData(selectedMode);
+	            }
+	        });
+	    }
+
+	    private void loadChartData(String mode) {
+	        if (mode.equals("연도별")) {
+	            // 연도별 데이터 로드 로직
+	            Map<String, Integer> data = dao.getSumByYear();
+	            DefaultPieDataset dataset = new DefaultPieDataset();
+	            data.forEach((year, total) -> dataset.setValue(year + "년", total));
+	            updateChart(spendPanel, dataset, "지출 차트 - 연도별");
+	        } else {
+	            // 월별 데이터 로드 로직
+	            Map<String, Integer> data = dao.getSumByMonth();
+	            DefaultPieDataset dataset = new DefaultPieDataset();
+	            data.forEach((month, total) -> dataset.setValue(month + "월", total));
+	            updateChart(spendPanel, dataset, "지출 차트 - 월별");
+	        }
+	    }
+	
 	/**
 	 * Create the frame.
 	 */
@@ -71,65 +107,38 @@ public class ChartFrame extends JFrame {
 		spendPanel = new JPanel();
 		tabbedPane.addTab("지출", spendPanel);
 		spendPanel.setLayout(null);
-
-		// 원형 그래프 생성
-		DefaultPieDataset spendDataset = new DefaultPieDataset();
-		spendDataset.setValue("One", new Double(43.2));
-		spendDataset.setValue("Two", new Double(10.0));
-		spendDataset.setValue("Three", new Double(27.5));
-		spendDataset.setValue("Four", new Double(17.5));
-		spendDataset.setValue("Five", new Double(11.0));
-		spendDataset.setValue("Six", new Double(19.4));
-
-		JFreeChart spendChart = ChartFactory.createPieChart("Spend Chart Example", spendDataset, true, true, false);
-
-		// 차트를 차트 패널에 추가
-		ChartPanel spendChartPanel = new ChartPanel(spendChart);
 		spendPanel.setLayout(new BorderLayout());
-		spendPanel.add(spendChartPanel, BorderLayout.CENTER);
 
 		incomePanel = new JPanel();
 		tabbedPane.addTab("수입", incomePanel);
 		incomePanel.setLayout(null);
-
-		// 수입 원형 그래프 생성
-		DefaultPieDataset incomeDataset = new DefaultPieDataset();
-		incomeDataset.setValue("Category A", new Double(20.0));
-		incomeDataset.setValue("Category B", new Double(30.0));
-		incomeDataset.setValue("Category C", new Double(25.0));
-		incomeDataset.setValue("Category D", new Double(25.0));
-
-		JFreeChart incomeChart = ChartFactory.createPieChart("Income Chart Example", incomeDataset, true, true, false);
-
-		// 차트를 차트 패널에 추가
-		ChartPanel incomeChartPanel = new ChartPanel(incomeChart);
 		incomePanel.setLayout(new BorderLayout());
-		incomePanel.add(incomeChartPanel, BorderLayout.CENTER);
 
 	}
 
-	private void loadChartData() {
-		Map<String, Double> spendData = dao.getSumByCategory("지출");
-		DefaultPieDataset spendDataset = new DefaultPieDataset();
-		for (Map.Entry<String, Double> entry : spendData.entrySet()) {
-			spendDataset.setValue(entry.getKey(), entry.getValue());
-		}
-		updateChart(spendPanel, spendDataset, "지출 차트");
-
-		Map<String, Double> incomeData = dao.getSumByCategory("수입");
-		DefaultPieDataset incomeDataset = new DefaultPieDataset();
-		for (Map.Entry<String, Double> entry : incomeData.entrySet()) {
-			incomeDataset.setValue(entry.getKey(), entry.getValue());
-		}
-		updateChart(incomePanel, incomeDataset, "수입 차트");
-	}
+//	private void loadChartData() {
+//		Map<String, Integer> spendData = dao.getSumByCategory("지출");
+//		DefaultPieDataset spendDataset = new DefaultPieDataset();
+//		for (Map.Entry<String, Integer> entry : spendData.entrySet()) {
+//			spendDataset.setValue(entry.getKey(), entry.getValue());
+//		}
+//		updateChart(spendPanel, spendDataset, "지출 차트");
+//
+//		Map<String, Integer> incomeData = dao.getSumByCategory("수입");
+//		DefaultPieDataset incomeDataset = new DefaultPieDataset();
+//		for (Map.Entry<String, Integer> entry : incomeData.entrySet()) {
+//			incomeDataset.setValue(entry.getKey(), entry.getValue());
+//		}
+//		updateChart(incomePanel, incomeDataset, "수입 차트");
+//	}
 
 	private void updateChart(JPanel panel, DefaultPieDataset dataset, String title) {
 		JFreeChart chart = ChartFactory.createPieChart(title, dataset, true, true, false);
 		ChartPanel chartPanel = new ChartPanel(chart);
 		panel.removeAll();
+
+		
 		panel.add(chartPanel, BorderLayout.CENTER);
 		panel.validate();
 	}
-
 }

@@ -131,7 +131,7 @@ public class AddFrame extends JFrame {
 		noteField.setColumns(10);
 
 		btnBack = new JButton("<");
-		btnBack.setBounds(547, 477, 120, 30);
+		btnBack.setBounds(528, 459, 120, 30);
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
@@ -140,7 +140,7 @@ public class AddFrame extends JFrame {
 		spendPanel.add(btnBack);
 
 		btnAdd = new JButton("v");
-		btnAdd.setBounds(682, 477, 120, 30);
+		btnAdd.setBounds(663, 459, 120, 30);
 		// btnAdd에 ActionListener 추가
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -195,7 +195,7 @@ public class AddFrame extends JFrame {
 		incomePanel.add(income);
 
 		noteField_1 = new JButton("<");
-		noteField_1.setBounds(538, 472, 120, 30);
+		noteField_1.setBounds(528, 459, 120, 30);
 		noteField_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
@@ -220,7 +220,7 @@ public class AddFrame extends JFrame {
 		incomePanel.add(lblMemo_1);
 
 		btnAdd_1 = new JButton("v");
-		btnAdd_1.setBounds(673, 472, 120, 30);
+		btnAdd_1.setBounds(663, 459, 120, 30);
 		incomePanel.add(btnAdd_1);
 		btnAdd_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

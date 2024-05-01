@@ -151,7 +151,7 @@ public class UpdateFrame extends JFrame {
         noteField.setColumns(10);
 
         btnBack = new JButton("<");
-        btnBack.setBounds(554, 477, 120, 30);
+        btnBack.setBounds(535, 459, 120, 30);
         btnBack.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 dispose();
@@ -160,7 +160,7 @@ public class UpdateFrame extends JFrame {
         spendPanel.add(btnBack);
 
         btnUpdate = new JButton("v");
-        btnUpdate.setBounds(682, 477, 120, 30);
+        btnUpdate.setBounds(663, 459, 120, 30);
         // btnAdd에 ActionListener 추가
         btnUpdate.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -207,7 +207,7 @@ public class UpdateFrame extends JFrame {
         incomePanel.add(income);
 
         noteField_1 = new JButton("<");
-        noteField_1.setBounds(547, 477, 120, 30);
+        noteField_1.setBounds(534, 459, 120, 30);
         noteField_1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 dispose();
@@ -232,7 +232,7 @@ public class UpdateFrame extends JFrame {
         incomePanel.add(lblMemo_1);
 
         btnUpdate_1 = new JButton("v");
-        btnUpdate_1.setBounds(682, 477, 120, 30);
+        btnUpdate_1.setBounds(669, 459, 120, 30);
         incomePanel.add(btnUpdate_1);
         btnUpdate_1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
