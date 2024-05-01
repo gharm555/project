@@ -12,6 +12,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 import com.itwill.transaction.model.Transaction;
 
@@ -226,5 +228,48 @@ public class TransactionDao {
 			closeResources(conn, stmt, rs);
 		}
 		return transaction;
+	}
+
+	public Map<String, Double> getSumByCategory(String type) {
+		Map<String, Double> results = new HashMap<>();
+		String sql = String.format("SELECT %s, SUM(%s) AS total FROM %s WHERE %s = ? GROUP BY %s", COL_CATEGORY,
+				COL_AMOUNT, TBL_Transaction, COL_TYPE, COL_CATEGORY);
+		try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+				PreparedStatement stmt = conn.prepareStatement(sql)) {
+			stmt.setString(1, type);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				String category = rs.getString("category");
+				double total = rs.getDouble("total");
+				results.put(category, total);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return results;
+	}
+
+	public Map<String, Double> getMonthlySumByCategory(String type, int year) {
+		Map<String, Double> results = new HashMap<>();
+		String sql = String.format(
+				"SELECT EXTRACT(MONTH FROM %s) AS month, %s, SUM(%s) AS total FROM %s WHERE %s = ? AND EXTRACT(YEAR FROM %s) = ? GROUP BY EXTRACT(MONTH FROM %s), %s",
+				COL_TRANSACTION_DATE, COL_CATEGORY, COL_AMOUNT, TBL_Transaction, COL_TYPE, COL_TRANSACTION_DATE,
+				COL_CATEGORY);
+		try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+				PreparedStatement stmt = conn.prepareStatement(sql)) {
+			stmt.setString(1, type);
+			stmt.setInt(2, year);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				String month = rs.getString("month");
+				String category = rs.getString("category");
+				double total = rs.getDouble("total");
+				String key = month + "월 - " + category;
+				results.put(key, total);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return results;
 	}
 }

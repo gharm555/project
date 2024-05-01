@@ -133,18 +133,19 @@ public class Main implements AddNotify, UpdateNotify, ChartNotify {
             }
         });
         scrollPane.setViewportView(detailsTable);
-        
+
         chartButton = new JButton("➕");
         chartButton.setFont(new Font("Dialog", Font.PLAIN, 20));
         chartButton.setBounds(12, 10, 70, 70);
         chartButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				ChartFrame.showChartFrame(frame, Main.this);
-				
-			}
-		});
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                TransactionDao dao = TransactionDao.getInstance();
+                ChartFrame.showChartFrame(frame, Main.this, dao);
+
+            }
+        });
         frame.getContentPane().add(chartButton);
 
     }
@@ -202,9 +203,9 @@ public class Main implements AddNotify, UpdateNotify, ChartNotify {
 
     }
 
-	@Override
-	public void chartshow() {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void chartshow() {
+        // TODO Auto-generated method stub
+
+    }
 }

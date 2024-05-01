@@ -53,8 +53,9 @@ public class UpdateFrame extends JFrame {
     private Date date;
     private Transaction transaction;
     private JTabbedPane tabbedPane;
-  private  JPanel spendPanel;
+    private JPanel spendPanel;
     private JPanel incomePanel;
+
     /**
      * Launch the application.
      * 
@@ -83,13 +84,14 @@ public class UpdateFrame extends JFrame {
         setDate(date);
         populateFields(transaction);
     }
+
     private void populateFields(Transaction transaction) {
         if (transaction != null) {
-            if(transaction.getType().equals("지출")){
-            paymentamount.setText(String.valueOf(transaction.getAmount()));
-            category.setSelectedItem(transaction.getCategory());
-            noteField.setText(transaction.getNotes());}
-            else{
+            if (transaction.getType().equals("지출")) {
+                paymentamount.setText(String.valueOf(transaction.getAmount()));
+                category.setSelectedItem(transaction.getCategory());
+                noteField.setText(transaction.getNotes());
+            } else {
                 tabbedPane.setSelectedIndex(1);
                 income.setText(String.valueOf(transaction.getAmount()));
                 category_1.setSelectedItem(transaction.getCategory());
@@ -98,6 +100,7 @@ public class UpdateFrame extends JFrame {
             // 날짜 설정, 다른 필드가 있다면 여기에 추가
         }
     }
+
     /**
      * Create the frame.
      */
@@ -161,11 +164,11 @@ public class UpdateFrame extends JFrame {
         // btnAdd에 ActionListener 추가
         btnUpdate.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                try { 
+                try {
                     int newAmount = Integer.parseInt(paymentamount.getText().trim());
                     String newCategory = (String) category.getSelectedItem();
                     String newNotes = noteField.getText().trim();
-                    
+
                     transaction.setType("지출");
                     transaction.setAmount(newAmount);
                     transaction.setCategory(newCategory);
@@ -183,7 +186,7 @@ public class UpdateFrame extends JFrame {
                     ex.printStackTrace();
                 }
                 app.UpdateSuccess();
-                
+
             }
         });
         spendPanel.add(btnUpdate);
@@ -235,10 +238,10 @@ public class UpdateFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 try {
                     // 입력 데이터 추출 및 검증
-                    int newAmount = Integer.parseInt(paymentamount.getText().trim());
-                    String newCategory = (String) category.getSelectedItem();
-                    String newNotes = noteField.getText().trim();
-        
+                    int newAmount = Integer.parseInt(income.getText().trim());
+                    String newCategory = (String) category_1.getSelectedItem();
+                    String newNotes = textField_1.getText().trim();
+
                     transaction.setType("수입");
                     transaction.setAmount(newAmount);
                     transaction.setCategory(newCategory);
@@ -255,7 +258,7 @@ public class UpdateFrame extends JFrame {
                     ex.printStackTrace();
                 }
                 app.UpdateSuccess();
-                
+
             }
         });
 
