@@ -30,7 +30,7 @@ public class Main implements AddNotify, UpdateNotify, ChartNotify {
 
     private JFrame frame;
     private JCalendar calendar;
-    private JButton updateButton;
+    private JButton createButton;
     private JPanel detailsPanel;
     private Date selectedDate;
     private TransactionDao dao = TransactionDao.getInstance();
@@ -40,10 +40,13 @@ public class Main implements AddNotify, UpdateNotify, ChartNotify {
     private AddFrame addFrame;
     private JButton deleteButton;
     private JButton chartButton;
-    private ImageIcon deleteIcon = new ImageIcon("/icon/deleteicon.png");
-    
+    private ImageIcon deleteIcon = new ImageIcon("project/icon/deleteicon.png");
+    private ImageIcon chartIcon = new ImageIcon("project/icon/charticon.png");
+    private ImageIcon addIcon = new ImageIcon("project/icon/addicon.png");
+
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
+
             public void run() {
                 try {
                     Main window = new Main();
@@ -88,17 +91,17 @@ public class Main implements AddNotify, UpdateNotify, ChartNotify {
             }
         });
 
-        updateButton = new JButton("➕");
-        updateButton.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
-        updateButton.setBounds(750, 370, 70, 70);
-        updateButton.addActionListener(new ActionListener() {
+        createButton = new JButton(addIcon);
+        createButton.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
+        createButton.setBounds(750, 370, 70, 70);
+        createButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 AddFrame.showAddFrame(frame, Main.this, selectedDate);
 
             }
         });
-        frame.getContentPane().add(updateButton);
+        frame.getContentPane().add(createButton);
 
         deleteButton = new JButton(deleteIcon);
         deleteButton.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
@@ -134,7 +137,7 @@ public class Main implements AddNotify, UpdateNotify, ChartNotify {
         });
         scrollPane.setViewportView(detailsTable);
 
-        chartButton = new JButton("➕");
+        chartButton = new JButton(chartIcon);
         chartButton.setFont(new Font("Dialog", Font.PLAIN, 20));
         chartButton.setBounds(12, 10, 70, 70);
         chartButton.addActionListener(new ActionListener() {
