@@ -122,7 +122,7 @@ public class ChartFrame extends JFrame {
 		contentPane.setLayout(null);
 
 		tabbedPane = new JTabbedPane();
-		tabbedPane.setBounds(20, 12, 810, 541);
+		tabbedPane.setBounds(20, 35, 810, 518);
 		contentPane.add(tabbedPane);
 
 		spendPanel = new JPanel();
