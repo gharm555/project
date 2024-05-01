@@ -9,8 +9,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Date;
 import java.util.List;
-
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -18,7 +18,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-
 import com.itwill.transaction.controller.TransactionDao;
 import com.itwill.transaction.model.Transaction;
 import com.itwill.transaction.view.AddFrame.AddNotify;
@@ -41,7 +40,8 @@ public class Main implements AddNotify, UpdateNotify, ChartNotify {
     private AddFrame addFrame;
     private JButton deleteButton;
     private JButton chartButton;
-
+    private ImageIcon deleteIcon = new ImageIcon("/icon/deleteicon.png");
+    
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -100,7 +100,7 @@ public class Main implements AddNotify, UpdateNotify, ChartNotify {
         });
         frame.getContentPane().add(updateButton);
 
-        deleteButton = new JButton("🗑️");
+        deleteButton = new JButton(deleteIcon);
         deleteButton.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
         deleteButton.setBounds(750, 452, 70, 70);
         deleteButton.addActionListener(e -> delete());
