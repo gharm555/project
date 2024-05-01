@@ -248,39 +248,94 @@ public class TransactionDao {
 		}
 		return results;
 	}
-	public Map<String, Integer> getSumByYear() {
-	    Map<String, Integer> results = new HashMap<>();
-	    String sql = "SELECT EXTRACT(YEAR FROM TransactionDate) AS year, SUM(Amount) AS total FROM Transactions GROUP BY EXTRACT(YEAR FROM TransactionDate)";
-	    try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-	         PreparedStatement stmt = conn.prepareStatement(sql);
-	         ResultSet rs = stmt.executeQuery()) {
-	        while (rs.next()) {
-	            String year = String.valueOf(rs.getInt("year"));
-	            Integer total = rs.getInt("total");
-	            results.put(year, total);
-	        }
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-	    return results;
+
+	public Map<String, Integer> getSumByCategoryAndMonth(String type, int year, int month) {
+		Map<String, Integer> results = new HashMap<>();
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		try {
+			conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			String sql = String.format(
+					"SELECT %s, SUM(%s) AS TOTAL FROM %s WHERE %s = ? AND EXTRACT(YEAR FROM %s) = ? AND EXTRACT(MONTH FROM %s) = ? GROUP BY %s",
+					COL_CATEGORY, COL_AMOUNT, TBL_Transaction, COL_TYPE, COL_TRANSACTION_DATE, COL_TRANSACTION_DATE,
+					COL_CATEGORY);
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, type);
+			stmt.setInt(2, year);
+			stmt.setInt(3, month);
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+				String category = rs.getString("CATEGORY");
+				int total = rs.getInt("TOTAL");
+				results.put(category, total);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null)
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			if (stmt != null)
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			if (conn != null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+		return results;
 	}
 
-	public Map<String, Integer> getSumByMonth() {
-	    Map<String, Integer> results = new HashMap<>();
-	    String sql = "SELECT EXTRACT(MONTH FROM TransactionDate) AS month, SUM(Amount) AS total FROM Transactions GROUP BY EXTRACT(MONTH FROM TransactionDate)";
-	    try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-	         PreparedStatement stmt = conn.prepareStatement(sql);
-	         ResultSet rs = stmt.executeQuery()) {
-	        while (rs.next()) {
-	            String month = String.format("%02d", rs.getInt("month")); // 월을 두 자리 숫자로 포맷
-	            Integer total = rs.getInt("total");
-	            results.put(month, total);
-	        }
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-	    return results;
+	public Map<String, Integer> getSumByCategoryAndYear(String type, int year) {
+		Map<String, Integer> results = new HashMap<>();
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		try {
+			conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			String sql = String.format(
+					"SELECT %s, SUM(%s) AS TOTAL FROM %s WHERE %s = ? AND EXTRACT(YEAR FROM %s) = ? GROUP BY %s",
+					COL_CATEGORY, COL_AMOUNT, TBL_Transaction, COL_TYPE, COL_TRANSACTION_DATE, COL_CATEGORY);
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, type);
+			stmt.setInt(2, year);
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+				String category = rs.getString("CATEGORY");
+				int total = rs.getInt("TOTAL");
+				results.put(category, total);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null)
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			if (stmt != null)
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			if (conn != null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+		return results;
 	}
-
-	
 }
