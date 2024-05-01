@@ -104,7 +104,7 @@ public class ChartFrame extends JFrame {
 	 */
 	public void init() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 850, 700);
+		setBounds(100, 100, 850, 637);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -112,7 +112,7 @@ public class ChartFrame extends JFrame {
 		contentPane.setLayout(null);
 
 		tabbedPane = new JTabbedPane();
-		tabbedPane.setBounds(12, 10, 810, 541);
+		tabbedPane.setBounds(20, 12, 810, 541);
 		contentPane.add(tabbedPane);
 
 		spendPanel = new JPanel();
@@ -126,16 +126,16 @@ public class ChartFrame extends JFrame {
 		incomePanel.setLayout(new BorderLayout());
 
 		prevMonthButton = new JButton("<");
-		prevMonthButton.setBounds(10, 560, 50, 30); // 위치와 크기 설정
+		prevMonthButton.setBounds(16, 565, 400, 30); // 위치와 크기 설정
 		contentPane.add(prevMonthButton);
 
 		nextMonthButton = new JButton(">");
-		nextMonthButton.setBounds(780, 560, 50, 30); // 위치와 크기 설정
+		nextMonthButton.setBounds(430, 565, 400, 30); // 위치와 크기 설정
 		contentPane.add(nextMonthButton);
 
 		String[] dataLoadOptions = { "월별", "연도별" };
 		dataLoadTypeComboBox = new JComboBox<>(dataLoadOptions);
-		dataLoadTypeComboBox.setBounds(300, 560, 150, 30); // 위치와 크기 설정
+		dataLoadTypeComboBox.setBounds(680, 6, 150, 30); // 위치와 크기 설정
 		contentPane.add(dataLoadTypeComboBox);
 
 	}
