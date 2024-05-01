@@ -66,25 +66,35 @@ public class ChartFrame extends JFrame {
 
 		prevMonthButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (currentMonth == 1) {
-					currentMonth = 12;
+				if (dataLoadTypeComboBox.getSelectedItem().equals("월별")) {
+					if (currentMonth == 1) {
+						currentMonth = 12;
+						currentYear--;
+					} else {
+						currentMonth--;
+					}
+					loadChartDataBYMonth(currentYear, currentMonth);
+				} else if (dataLoadTypeComboBox.getSelectedItem().equals("연도별")) {
 					currentYear--;
-				} else {
-					currentMonth--;
+					loadChartDataByYear(currentYear);
 				}
-				loadChartDataBYMonth(currentYear, currentMonth);
 			}
 		});
 
 		nextMonthButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (currentMonth == 12) {
-					currentMonth = 1;
+				if (dataLoadTypeComboBox.getSelectedItem().equals("월별")) {
+					if (currentMonth == 12) {
+						currentMonth = 1;
+						currentYear++;
+					} else {
+						currentMonth++;
+					}
+					loadChartDataBYMonth(currentYear, currentMonth);
+				} else if (dataLoadTypeComboBox.getSelectedItem().equals("연도별")) {
 					currentYear++;
-				} else {
-					currentMonth++;
+					loadChartDataByYear(currentYear);
 				}
-				loadChartDataBYMonth(currentYear, currentMonth);
 			}
 		});
 		dataLoadTypeComboBox.addActionListener(new ActionListener() {
