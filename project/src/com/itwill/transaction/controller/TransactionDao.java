@@ -155,7 +155,7 @@ public class TransactionDao {
 		return transactions;
 	}
 
-	public void update(Transaction transaction) {
+	public void update(Transaction transaction, int id) {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		try {
