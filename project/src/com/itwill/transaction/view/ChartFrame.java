@@ -14,6 +14,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.border.EmptyBorder;
@@ -43,6 +44,8 @@ public class ChartFrame extends JFrame {
 	private JButton nextMonthButton;
 	private JButton closeButton;
 	private int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+	private int maxYear = Calendar.getInstance().get(Calendar.YEAR) + 5;
+	private int minYear = Calendar.getInstance().get(Calendar.YEAR) - 5;
 	private int currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 1;
 	private JComboBox<String> dataLoadTypeComboBox;
 	private ImageIcon prevIcon = new ImageIcon("project/icon/previcon.png");
@@ -178,6 +181,14 @@ public class ChartFrame extends JFrame {
 	}
 
 	private void loadChartDataBYMonth(int year, int month) {
+
+		// 연도 범위 확인
+		if (year < minYear || year > maxYear) {
+			JOptionPane.showMessageDialog(this,
+					year + "년 데이터는 조회할 수 없습니다. " + minYear + "년부터 " + maxYear + "년까지의 데이터만 조회 가능합니다.");
+			return;
+		} // 범위를 벗어나면 함수 종료
+
 		Map<String, Integer> spendData = dao.getSumByCategoryAndMonth("지출", year, month);
 		DefaultPieDataset spendDataset = new DefaultPieDataset();
 		for (Map.Entry<String, Integer> entry : spendData.entrySet()) {
@@ -194,6 +205,12 @@ public class ChartFrame extends JFrame {
 	}
 
 	private void loadChartDataByYear(int year) {
+
+		if (year < minYear || year > maxYear) {
+			JOptionPane.showMessageDialog(this,
+					year + "년 데이터는 조회할 수 없습니다. " + minYear + "년부터 " + maxYear + "년까지의 데이터만 조회 가능합니다.");
+			return;
+		}
 		Map<String, Integer> spendData = dao.getSumByCategoryAndYear("지출", year);
 		DefaultPieDataset spendDataset = new DefaultPieDataset();
 		for (Map.Entry<String, Integer> entry : spendData.entrySet()) {
