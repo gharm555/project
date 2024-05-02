@@ -182,6 +182,23 @@ public class UpdateFrame extends JFrame {
                     String newCategory = (String) category.getSelectedItem();
                     String newNotes = noteField.getText().trim();
 
+                    if (newAmount == 0) {
+                        JOptionPane.showMessageDialog(null, "0원은 입력할 수 없습니다.");
+                        return;
+                    }
+                    if (newAmount > 2147483647) {
+                        JOptionPane.showMessageDialog(null, "금액은 2147483647원을 초과할 수 없습니다.");
+                        return;
+                    }
+                    if (newAmount < 0) {
+                        JOptionPane.showMessageDialog(null, "음수는 입력할 수 없습니다.");
+                        return;
+                    }
+                    if (newNotes.length() > 255) {
+                        JOptionPane.showMessageDialog(null, "메모는 255자를 초과할 수 없습니다.");
+                        return;
+                    }
+
                     id = transaction.getId();
                     transaction.setType("지출");
                     transaction.setAmount(newAmount);
@@ -263,6 +280,22 @@ public class UpdateFrame extends JFrame {
                     String newCategory = (String) category_1.getSelectedItem();
                     String newNotes = textField_1.getText().trim();
 
+                    if (newAmount == 0) {
+                        JOptionPane.showMessageDialog(null, "0원은 입력할 수 없습니다.");
+                        return;
+                    }
+                    if (newAmount > 2147483647) {
+                        JOptionPane.showMessageDialog(null, "금액은 2147483647원을 초과할 수 없습니다.");
+                        return;
+                    }
+                    if (newAmount < 0) {
+                        JOptionPane.showMessageDialog(null, "음수는 입력할 수 없습니다.");
+                        return;
+                    }
+                    if (newNotes.length() > 255) {
+                        JOptionPane.showMessageDialog(null, "메모는 255자를 초과할 수 없습니다.");
+                        return;
+                    }
                     id = transaction.getId();
                     transaction.setType("수입");
                     transaction.setAmount(newAmount);
