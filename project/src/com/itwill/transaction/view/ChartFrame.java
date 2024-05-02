@@ -7,6 +7,8 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Calendar;
 import java.util.Map;
 
@@ -26,6 +28,8 @@ import org.jfree.chart.title.TextTitle;
 import org.jfree.data.general.DefaultPieDataset;
 
 import com.itwill.transaction.controller.TransactionDao;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 public class ChartFrame extends JFrame {
 	public interface ChartNotify {
@@ -47,10 +51,13 @@ public class ChartFrame extends JFrame {
 	private int maxYear = Calendar.getInstance().get(Calendar.YEAR) + 5;
 	private int minYear = Calendar.getInstance().get(Calendar.YEAR) - 5;
 	private int currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 1;
+	private final int FIXCURRENTYEAR = Calendar.getInstance().get(Calendar.YEAR);
+	private final int FIXCURRENTMONTH = Calendar.getInstance().get(Calendar.MONTH) + 1;
 	private JComboBox<String> dataLoadTypeComboBox;
 	private ImageIcon prevIcon = new ImageIcon("project/icon/previcon.png");
 	private ImageIcon nextIcon = new ImageIcon("project/icon/nexticon.png");
 	private ImageIcon closeIcon = new ImageIcon("project/icon/closeicon.png");
+	private JLabel lblToday;
 
 	/**
 	 * Launch the application.
@@ -177,6 +184,22 @@ public class ChartFrame extends JFrame {
 		closeButton.setBorderPainted(false);
 		closeButton.setContentAreaFilled(false);
 		closeButton.setFocusPainted(false);
+
+		lblToday = new JLabel(FIXCURRENTYEAR + "년 " + FIXCURRENTMONTH+"월");
+		lblToday.setHorizontalAlignment(SwingConstants.CENTER);
+		lblToday.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				String selectedOption = (String) dataLoadTypeComboBox.getSelectedItem();
+				if (selectedOption.equals("월별")) {
+					loadChartDataBYMonth(FIXCURRENTYEAR, FIXCURRENTMONTH);
+				} else if (selectedOption.equals("연도별")) {
+					loadChartDataByYear(FIXCURRENTYEAR);
+				}
+			}
+		});
+		lblToday.setBounds(324, 6, 202, 48);
+		contentPane.add(lblToday);
 
 	}
 
