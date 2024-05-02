@@ -91,7 +91,7 @@ public class AddFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public void init() {
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 850, 650);
 		setLocationRelativeTo(parent);
 		contentPane = new JPanel();
@@ -148,6 +148,7 @@ public class AddFrame extends JFrame {
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
+				parent.setVisible(true);
 			}
 		});
 		spendPanel.add(btnBack);
@@ -187,6 +188,7 @@ public class AddFrame extends JFrame {
 				}
 				app.addSuccess();
 				dispose();
+				parent.setVisible(true);
 			}
 		});
 		spendPanel.add(btnAdd);
@@ -215,6 +217,7 @@ public class AddFrame extends JFrame {
 		btnBack_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
+				parent.setVisible(true);
 			}
 		});
 		incomePanel.add(btnBack_1);
@@ -273,6 +276,7 @@ public class AddFrame extends JFrame {
 				}
 				app.addSuccess();
 				dispose();
+				parent.setVisible(true);
 			}
 		});
 		btnBack_1.setBorderPainted(false);

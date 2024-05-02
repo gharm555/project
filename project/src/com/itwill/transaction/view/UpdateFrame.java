@@ -110,7 +110,7 @@ public class UpdateFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public void init() {
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 850, 650);
 		setLocationRelativeTo(parent);
 		contentPane = new JPanel();
@@ -165,6 +165,7 @@ public class UpdateFrame extends JFrame {
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
+				parent.setVisible(true);
 			}
 		});
 		spendPanel.add(btnBack);
@@ -189,6 +190,7 @@ public class UpdateFrame extends JFrame {
 					// 성공 메시지
 					JOptionPane.showMessageDialog(null, "수정이 완료되었습니다.");
 					dispose(); // 창 닫기
+					parent.setVisible(true);
 				} catch (NumberFormatException ex) {
 					JOptionPane.showMessageDialog(null, "금액은 숫자로 입력해야 합니다.");
 				} catch (Exception ex) {
@@ -242,10 +244,10 @@ public class UpdateFrame extends JFrame {
 		btnBack_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
+				parent.setVisible(true);
 			}
 		});
 		incomePanel.add(btnBack_1);
-		
 
 		btnUpdate_1 = new JButton(checkIcon);
 		btnUpdate_1.setBounds(735, 506, 48, 48);
@@ -267,6 +269,7 @@ public class UpdateFrame extends JFrame {
 					// 성공 메시지
 					JOptionPane.showMessageDialog(null, "수정이 완료되었습니다.");
 					dispose(); // 창 닫기
+					parent.setVisible(true);
 				} catch (NumberFormatException ex) {
 					JOptionPane.showMessageDialog(null, "금액은 숫자로 입력해야 합니다.");
 				} catch (Exception ex) {
@@ -286,7 +289,7 @@ public class UpdateFrame extends JFrame {
 		btnUpdate.setBorderPainted(false);
 		btnUpdate.setContentAreaFilled(false);
 		btnUpdate.setFocusPainted(false);
-		
+
 		lblAmount_1 = new JLabel("Amonut");
 		lblAmount_1.setFont(new Font("D2Coding", Font.PLAIN, 13));
 		lblAmount_1.setHorizontalAlignment(SwingConstants.CENTER);
@@ -295,7 +298,7 @@ public class UpdateFrame extends JFrame {
 		btnUpdate_1.setBorderPainted(false);
 		btnUpdate_1.setContentAreaFilled(false);
 		btnUpdate_1.setFocusPainted(false);
-		
+
 		JLabel lblAmount = new JLabel("Amonut");
 		lblAmount.setFont(new Font("D2Coding", Font.PLAIN, 13));
 		lblAmount.setHorizontalAlignment(SwingConstants.CENTER);

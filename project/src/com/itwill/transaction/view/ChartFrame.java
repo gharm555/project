@@ -121,7 +121,7 @@ public class ChartFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public void init() {
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 850, 650);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -150,10 +150,13 @@ public class ChartFrame extends JFrame {
 		nextMonthButton = new JButton(nextIcon);
 		nextMonthButton.setBounds(550, 6, 48, 48); // 위치와 크기 설정
 		contentPane.add(nextMonthButton);
-		
+
 		closeButton = new JButton(closeIcon);
 		closeButton.setBounds(782, 568, 48, 48); // 위치와 크기 설정
-		closeButton.addActionListener(e -> dispose());
+		closeButton.addActionListener(e -> {
+			dispose();
+			parent.setVisible(true);
+		});
 		contentPane.add(closeButton);
 
 		String[] dataLoadOptions = { "월별", "연도별" };
@@ -213,7 +216,6 @@ public class ChartFrame extends JFrame {
 
 		TextTitle chartTitle = chart.getTitle();
 		chartTitle.setFont(new Font("D2Coding", Font.PLAIN, 24));
-
 
 		panel.add(chartPanel, BorderLayout.CENTER);
 		panel.validate();
