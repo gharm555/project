@@ -7,8 +7,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -18,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
 import com.itwill.transaction.controller.TransactionDao;
 import com.itwill.transaction.model.Transaction;
 import com.itwill.transaction.view.AddFrame.AddNotify;
@@ -71,14 +75,16 @@ public class Main implements AddNotify, UpdateNotify, ChartNotify {
     private void initialize() {
         frame = new JFrame();
         frame.setTitle("Transaction Management");
-        frame.setBounds(100, 100, 850, 600);
+        frame.setBounds(100, 100, 850, 650);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.getContentPane().setLayout(null);
         frame.setLocationRelativeTo(null);
 
         calendar = new JCalendar();
-        calendar.setBounds(125, 36, 600, 400);
+        calendar.setBounds(73, 36, 703, 441);
+        calendar.setMinSelectableDate(new GregorianCalendar(2000, Calendar.JANUARY, 1).getTime());
+        calendar.setMaxSelectableDate(new GregorianCalendar(2050, Calendar.DECEMBER, 31).getTime());
         frame.getContentPane().add(calendar);
         selectedDate = calendar.getDate();
         calendar.addPropertyChangeListener("calendar", event -> {
@@ -93,7 +99,10 @@ public class Main implements AddNotify, UpdateNotify, ChartNotify {
 
         createButton = new JButton(addIcon);
         createButton.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
-        createButton.setBounds(750, 370, 70, 70);
+        createButton.setBounds(775, 493, 48, 48);
+        createButton.setBorderPainted(false);
+        createButton.setContentAreaFilled(false);
+        createButton.setFocusPainted(false);
         createButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -105,14 +114,17 @@ public class Main implements AddNotify, UpdateNotify, ChartNotify {
 
         deleteButton = new JButton(deleteIcon);
         deleteButton.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
-        deleteButton.setBounds(750, 452, 70, 70);
+        deleteButton.setBounds(775, 553, 48, 48);
+        deleteButton.setBorderPainted(false);
+        deleteButton.setContentAreaFilled(false);
+        deleteButton.setFocusPainted(false);
         deleteButton.addActionListener(e -> delete());
         frame.getContentPane().add(deleteButton);
 
         detailsPanel = new JPanel();
         detailsPanel.setLayout(new BorderLayout());
-        detailsPanel.setBounds(125, 448, 600, 112); // 위치와 크기 조정 필요
-        detailsPanel.setBorder(BorderFactory.createTitledBorder("Details"));
+        detailsPanel.setBounds(125, 489, 600, 112); // 위치와 크기 조정 필요
+        detailsPanel.setBorder(BorderFactory.createTitledBorder("상세"));
 
         frame.getContentPane().add(detailsPanel);
 
@@ -139,7 +151,10 @@ public class Main implements AddNotify, UpdateNotify, ChartNotify {
 
         chartButton = new JButton(chartIcon);
         chartButton.setFont(new Font("Dialog", Font.PLAIN, 20));
-        chartButton.setBounds(12, 10, 70, 70);
+        chartButton.setBounds(775, 429, 48, 48);
+        chartButton.setBorderPainted(false);
+        chartButton.setContentAreaFilled(false);
+        chartButton.setFocusPainted(false);
         chartButton.addActionListener(new ActionListener() {
 
             @Override

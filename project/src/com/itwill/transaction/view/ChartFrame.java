@@ -1,12 +1,16 @@
 package com.itwill.transaction.view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Calendar;
 import java.util.Map;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -14,10 +18,10 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.border.EmptyBorder;
 
-import java.util.Calendar;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.title.TextTitle;
 import org.jfree.data.general.DefaultPieDataset;
 
 import com.itwill.transaction.controller.TransactionDao;
@@ -37,9 +41,13 @@ public class ChartFrame extends JFrame {
 	private TransactionDao dao;
 	private JButton prevMonthButton;
 	private JButton nextMonthButton;
+	private JButton closeButton;
 	private int currentYear = Calendar.getInstance().get(Calendar.YEAR);
 	private int currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 1;
 	private JComboBox<String> dataLoadTypeComboBox;
+	private ImageIcon prevIcon = new ImageIcon("project/icon/previcon.png");
+	private ImageIcon nextIcon = new ImageIcon("project/icon/nexticon.png");
+	private ImageIcon closeIcon = new ImageIcon("project/icon/closeicon.png");
 
 	/**
 	 * Launch the application.
@@ -114,15 +122,15 @@ public class ChartFrame extends JFrame {
 	 */
 	public void init() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 850, 637);
+		setBounds(100, 100, 850, 650);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
+		setLocationRelativeTo(parent);
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
 		tabbedPane = new JTabbedPane();
-		tabbedPane.setBounds(20, 35, 810, 518);
+		tabbedPane.setBounds(20, 60, 810, 496);
 		contentPane.add(tabbedPane);
 
 		spendPanel = new JPanel();
@@ -135,18 +143,34 @@ public class ChartFrame extends JFrame {
 		incomePanel.setLayout(null);
 		incomePanel.setLayout(new BorderLayout());
 
-		prevMonthButton = new JButton("<");
-		prevMonthButton.setBounds(16, 565, 400, 30); // 위치와 크기 설정
+		prevMonthButton = new JButton(prevIcon);
+		prevMonthButton.setBounds(251, 6, 48, 48); // 위치와 크기 설정
 		contentPane.add(prevMonthButton);
 
-		nextMonthButton = new JButton(">");
-		nextMonthButton.setBounds(430, 565, 400, 30); // 위치와 크기 설정
+		nextMonthButton = new JButton(nextIcon);
+		nextMonthButton.setBounds(550, 6, 48, 48); // 위치와 크기 설정
 		contentPane.add(nextMonthButton);
+		
+		closeButton = new JButton(closeIcon);
+		closeButton.setBounds(782, 568, 48, 48); // 위치와 크기 설정
+		closeButton.addActionListener(e -> dispose());
+		contentPane.add(closeButton);
 
 		String[] dataLoadOptions = { "월별", "연도별" };
 		dataLoadTypeComboBox = new JComboBox<>(dataLoadOptions);
+		dataLoadTypeComboBox.setFont(new Font("D2Coding", Font.PLAIN, 13));
 		dataLoadTypeComboBox.setBounds(680, 6, 150, 30); // 위치와 크기 설정
 		contentPane.add(dataLoadTypeComboBox);
+
+		nextMonthButton.setBorderPainted(false);
+		nextMonthButton.setContentAreaFilled(false);
+		nextMonthButton.setFocusPainted(false);
+		prevMonthButton.setBorderPainted(false);
+		prevMonthButton.setContentAreaFilled(false);
+		prevMonthButton.setFocusPainted(false);
+		closeButton.setBorderPainted(false);
+		closeButton.setContentAreaFilled(false);
+		closeButton.setFocusPainted(false);
 
 	}
 
@@ -156,14 +180,14 @@ public class ChartFrame extends JFrame {
 		for (Map.Entry<String, Integer> entry : spendData.entrySet()) {
 			spendDataset.setValue(entry.getKey(), entry.getValue());
 		}
-		updateChart(spendPanel, spendDataset, "지출 차트 - " + year + "년 " + month + "월");
+		updateChart(spendPanel, spendDataset, year + "년 " + month + "월");
 
 		Map<String, Integer> incomeData = dao.getSumByCategoryAndMonth("수입", year, month);
 		DefaultPieDataset incomeDataset = new DefaultPieDataset();
 		for (Map.Entry<String, Integer> entry : incomeData.entrySet()) {
 			incomeDataset.setValue(entry.getKey(), entry.getValue());
 		}
-		updateChart(incomePanel, incomeDataset, "수입 차트 - " + year + "년 " + month + "월");
+		updateChart(incomePanel, incomeDataset, year + "년 " + month + "월");
 	}
 
 	private void loadChartDataByYear(int year) {
@@ -172,20 +196,24 @@ public class ChartFrame extends JFrame {
 		for (Map.Entry<String, Integer> entry : spendData.entrySet()) {
 			spendDataset.setValue(entry.getKey(), entry.getValue());
 		}
-		updateChart(spendPanel, spendDataset, "지출 차트 - " + year + "년");
+		updateChart(spendPanel, spendDataset, year + "년");
 
 		Map<String, Integer> incomeData = dao.getSumByCategoryAndYear("수입", year);
 		DefaultPieDataset incomeDataset = new DefaultPieDataset();
 		for (Map.Entry<String, Integer> entry : incomeData.entrySet()) {
 			incomeDataset.setValue(entry.getKey(), entry.getValue());
 		}
-		updateChart(incomePanel, incomeDataset, "수입 차트 - " + year + "년");
+		updateChart(incomePanel, incomeDataset, year + "년");
 	}
 
 	private void updateChart(JPanel panel, DefaultPieDataset dataset, String title) {
 		JFreeChart chart = ChartFactory.createPieChart(title, dataset, true, true, false);
 		ChartPanel chartPanel = new ChartPanel(chart);
 		panel.removeAll();
+
+		TextTitle chartTitle = chart.getTitle();
+		chartTitle.setFont(new Font("D2Coding", Font.PLAIN, 24));
+
 
 		panel.add(chartPanel, BorderLayout.CENTER);
 		panel.validate();

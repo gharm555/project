@@ -18,12 +18,14 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.SwingConstants;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.awt.event.ActionEvent;
+import java.awt.Font;
 
 public class AddFrame extends JFrame {
 	public interface AddNotify {
@@ -47,12 +49,16 @@ public class AddFrame extends JFrame {
 	private JTextField income;
 	private JComboBox<String> category_1;
 	private JLabel lblMemo_1;
-	private JButton noteField_1;
+	private JButton btnBack_1;
 	private JButton btnAdd_1;
 	private JTextField paymentamount;
 	private JTextField noteField;
 	private AddNotify app;
 	private Date date;
+	private ImageIcon checkIcon = new ImageIcon("project/icon/checkicon.png");
+	private ImageIcon prevIcon = new ImageIcon("project/icon/previcon.png");
+	private JLabel lblAmount;
+	private JLabel lblAmount_1;
 
 	/**
 	 * Launch the application.
@@ -86,7 +92,7 @@ public class AddFrame extends JFrame {
 	 */
 	public void init() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 850, 600);
+		setBounds(100, 100, 850, 650);
 		setLocationRelativeTo(parent);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -96,42 +102,49 @@ public class AddFrame extends JFrame {
 
 		// 탭 생성
 		JTabbedPane tabbedPane = new JTabbedPane();
-		tabbedPane.setBounds(12, 6, 810, 541);
+		tabbedPane.setBounds(12, 6, 810, 610);
 		contentPane.add(tabbedPane);
 		final DefaultComboBoxModel<String> paymentModel = new DefaultComboBoxModel<String>(PAYMENT_CATEGORIES);
 
 		// 지출 탭
 		JPanel spendPanel = new JPanel();
 		spendPanel.setLayout(null);
+		spendPanel.setFont(new Font("D2Coding", Font.PLAIN, 13));
 		tabbedPane.addTab("지출", spendPanel);
+		
 
 		lblDate = new JLabel("");
+		lblDate.setFont(new Font("D2Coding", Font.PLAIN, 13));
 		lblDate.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDate.setBounds(252, 10, 300, 80);
 		spendPanel.add(lblDate);
 
 		paymentamount = new JTextField();
-		paymentamount.setBounds(122, 128, 560, 80);
+		paymentamount.setFont(new Font("D2Coding", Font.PLAIN, 13));
+		paymentamount.setBounds(290, 128, 420, 80);
 		spendPanel.add(paymentamount);
 		paymentamount.setColumns(10);
 
 		category = new JComboBox<>();
+		category.setFont(new Font("D2Coding", Font.PLAIN, 13));
 		category.setBounds(122, 246, 560, 80);
 		category.setModel(paymentModel);
 		spendPanel.add(category);
 
 		lblNote = new JLabel("Memo");
+		lblNote.setFont(new Font("D2Coding", Font.PLAIN, 13));
 		lblNote.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNote.setBounds(95, 363, 100, 80);
 		spendPanel.add(lblNote);
 
 		noteField = new JTextField();
+		noteField.setFont(new Font("D2Coding", Font.PLAIN, 13));
 		noteField.setBounds(290, 364, 420, 80);
 		spendPanel.add(noteField);
 		noteField.setColumns(10);
 
-		btnBack = new JButton("<");
-		btnBack.setBounds(528, 459, 120, 30);
+		btnBack = new JButton(prevIcon);
+		btnBack.setBounds(662, 510, 48, 48);
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
@@ -139,8 +152,8 @@ public class AddFrame extends JFrame {
 		});
 		spendPanel.add(btnBack);
 
-		btnAdd = new JButton("v");
-		btnAdd.setBounds(663, 459, 120, 30);
+		btnAdd = new JButton(checkIcon);
+		btnAdd.setBounds(735, 510, 48, 48);
 		// btnAdd에 ActionListener 추가
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -165,7 +178,6 @@ public class AddFrame extends JFrame {
 					transaction.setCategory(categorySelected);
 					transaction.setNotes(noteText);
 					transaction.setDate(date); // 현재 날짜 사용, 필요에 따라 다른 날짜 지정 가능
-					System.out.println(date);
 
 					dao.create(transaction); // TransactionDao의 create 메소드를 호출하여 데이터 저장
 					JOptionPane.showMessageDialog(null, "지출이 성공적으로 추가되었습니다.");
@@ -182,45 +194,52 @@ public class AddFrame extends JFrame {
 		// 수입 탭
 		JPanel incomePanel = new JPanel();
 		incomePanel.setLayout(null);
+		incomePanel.setFont(new Font("D2Coding", Font.PLAIN, 13));
 		tabbedPane.addTab("수입", incomePanel);
 
 		lblDate_1 = new JLabel("");
+		lblDate_1.setFont(new Font("D2Coding", Font.PLAIN, 13));
 		lblDate_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDate_1.setBounds(252, 10, 300, 80);
 		incomePanel.add(lblDate_1);
 
 		income = new JTextField();
+		income.setFont(new Font("D2Coding", Font.PLAIN, 13));
 		income.setColumns(10);
-		income.setBounds(122, 128, 560, 80);
+		income.setBounds(290, 128, 420, 80);
 		incomePanel.add(income);
 
-		noteField_1 = new JButton("<");
-		noteField_1.setBounds(528, 459, 120, 30);
-		noteField_1.addActionListener(new ActionListener() {
+		btnBack_1 = new JButton(prevIcon);
+		btnBack_1.setBounds(662, 510, 48, 48);
+		
+		btnBack_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
 		});
-		incomePanel.add(noteField_1);
+		incomePanel.add(btnBack_1);
 
 		category_1 = new JComboBox<>();
+		category_1.setFont(new Font("D2Coding", Font.PLAIN, 13));
 		category_1.setBounds(122, 246, 560, 80);
 		final DefaultComboBoxModel<String> incomeModel = new DefaultComboBoxModel<String>(INCOME_CATEGORIES);
 		category_1.setModel(incomeModel);
 		incomePanel.add(category_1);
 
 		textField_1 = new JTextField();
+		textField_1.setFont(new Font("D2Coding", Font.PLAIN, 13));
 		textField_1.setColumns(10);
 		textField_1.setBounds(290, 364, 420, 80);
 		incomePanel.add(textField_1);
 
 		lblMemo_1 = new JLabel("Memo");
+		lblMemo_1.setFont(new Font("D2Coding", Font.PLAIN, 13));
 		lblMemo_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblMemo_1.setBounds(95, 363, 100, 80);
 		incomePanel.add(lblMemo_1);
 
-		btnAdd_1 = new JButton("v");
-		btnAdd_1.setBounds(663, 459, 120, 30);
+		btnAdd_1 = new JButton(checkIcon);
+		btnAdd_1.setBounds(735, 510, 48, 48);
 		incomePanel.add(btnAdd_1);
 		btnAdd_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -256,7 +275,30 @@ public class AddFrame extends JFrame {
 				dispose();
 			}
 		});
-
+		btnBack_1.setBorderPainted(false);
+		btnBack_1.setContentAreaFilled(false);
+		btnBack_1.setFocusPainted(false);
+		btnBack.setBorderPainted(false);
+		btnBack.setContentAreaFilled(false);
+		btnBack.setFocusPainted(false);
+		btnAdd.setBorderPainted(false);
+		btnAdd.setContentAreaFilled(false);
+		btnAdd.setFocusPainted(false);
+		
+		lblAmount = new JLabel("Amonut");
+		lblAmount.setFont(new Font("D2Coding", Font.PLAIN, 13));
+		lblAmount.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAmount.setBounds(95, 128, 100, 80);
+		spendPanel.add(lblAmount);
+		btnAdd_1.setBorderPainted(false);
+		btnAdd_1.setContentAreaFilled(false);
+		btnAdd_1.setFocusPainted(false);
+		
+		lblAmount_1 = new JLabel("Amonut");
+		lblAmount_1.setFont(new Font("D2Coding", Font.PLAIN, 13));
+		lblAmount_1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAmount_1.setBounds(95, 128, 100, 80);
+		incomePanel.add(lblAmount_1);
 	}
 
 	public void setDate(Date date) {
