@@ -26,7 +26,7 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.title.TextTitle;
 import org.jfree.data.general.DefaultPieDataset;
-
+import org.jfree.chart.plot.PiePlot;
 import com.itwill.transaction.controller.TransactionDao;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -255,7 +255,14 @@ public class ChartFrame extends JFrame {
 		panel.removeAll();
 
 		TextTitle chartTitle = chart.getTitle();
-		chartTitle.setFont(new Font("D2Coding", Font.PLAIN, 24));
+    chartTitle.setFont(new Font("D2Coding", Font.PLAIN, 24)); // 폰트 설정
+
+    // 범례 폰트 설정
+    if (chart.getLegend() != null) {
+        chart.getLegend().setItemFont(new Font("D2Coding", Font.PLAIN, 12));
+    }
+		PiePlot plot = (PiePlot) chart.getPlot();
+    plot.setLabelFont(new Font("D2Coding", Font.PLAIN, 12));
 
 		panel.add(chartPanel, BorderLayout.CENTER);
 		panel.validate();
