@@ -134,6 +134,7 @@ public class ChartFrame extends JFrame {
 	public void init() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 850, 650);
+		setResizable(false);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setLocationRelativeTo(parent);
@@ -141,7 +142,7 @@ public class ChartFrame extends JFrame {
 		contentPane.setLayout(null);
 
 		tabbedPane = new JTabbedPane();
-		tabbedPane.setBounds(20, 60, 810, 496);
+		tabbedPane.setBounds(12, 60, 810, 496);
 		contentPane.add(tabbedPane);
 
 		spendPanel = new JPanel();
