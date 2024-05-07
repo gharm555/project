@@ -7,13 +7,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -48,9 +46,9 @@ public class Main implements AddNotify, UpdateNotify, ChartNotify {
 	private JButton deleteButton;
 	private JButton chartButton;
 	private List<Transaction> transactions;
-	private ImageIcon deleteIcon = new ImageIcon("project/icon/deleteicon.png");
-	private ImageIcon chartIcon = new ImageIcon("project/icon/charticon.png");
-	private ImageIcon addIcon = new ImageIcon("project/icon/addicon.png");
+	private ImageIcon deleteIcon = new ImageIcon(getClass().getResource("/deleteicon.png"));
+	private ImageIcon chartIcon = new ImageIcon(getClass().getResource("/charticon.png"));
+	private ImageIcon addIcon = new ImageIcon(getClass().getResource("/addicon.png"));
 	private JLabel lblToday;
 
 	public static void main(String[] args) {
@@ -70,11 +68,6 @@ public class Main implements AddNotify, UpdateNotify, ChartNotify {
 	public Main() {
 		initialize();
 		displayTransactionsForDate(selectedDate);
-	}
-
-	private void initTable() {
-		transactions = dao.read();
-		resetTableModel(transactions);
 	}
 
 	private void initialize() {
@@ -232,7 +225,7 @@ public class Main implements AddNotify, UpdateNotify, ChartNotify {
 					JOptionPane.showMessageDialog(frame, "삭제 성공");
 					displayTransactionsForDate(selectedDate);
 				} else {
-					JOptionPane.showMessageDialog(frame, "삭제 실패", "삭제", 0);
+					JOptionPane.showMessageDialog(frame, "삭제 실", "삭제", 0);
 				}
 			}
 		}
