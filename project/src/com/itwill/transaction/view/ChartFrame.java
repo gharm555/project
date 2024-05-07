@@ -54,9 +54,9 @@ public class ChartFrame extends JFrame {
 	private final int FIXCURRENTYEAR = Calendar.getInstance().get(Calendar.YEAR);
 	private final int FIXCURRENTMONTH = Calendar.getInstance().get(Calendar.MONTH) + 1;
 	private JComboBox<String> dataLoadTypeComboBox;
-	private ImageIcon prevIcon = new ImageIcon("/transaction/resource/previcon.png");
-	private ImageIcon nextIcon = new ImageIcon("/transaction/resource/nexticon.png");
-	private ImageIcon closeIcon = new ImageIcon("/transaction/resource/closeicon.png");
+	private ImageIcon prevIcon = new ImageIcon(getClass().getResource("/previcon.png"));
+	private ImageIcon nextIcon = new ImageIcon(getClass().getResource("/nexticon.png"));
+	private ImageIcon closeIcon = new ImageIcon(getClass().getResource("/closeicon.png"));
 
 	private JLabel lblToday;
 

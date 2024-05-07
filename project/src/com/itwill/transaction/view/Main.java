@@ -72,7 +72,7 @@ public class Main implements AddNotify, UpdateNotify, ChartNotify {
 
 	private void initialize() {
 		frame = new JFrame();
-		frame.setTitle("Transaction Management");
+		frame.setTitle("Money Manager");
 		frame.setBounds(100, 100, 850, 650);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);

@@ -57,8 +57,8 @@ public class UpdateFrame extends JFrame {
     private JTabbedPane tabbedPane;
     private JPanel spendPanel;
     private JPanel incomePanel;
-    private ImageIcon checkIcon = new ImageIcon("project/icon/checkicon.png");
-    private ImageIcon prevIcon = new ImageIcon("project/icon/previcon.png");
+    private ImageIcon checkIcon = new ImageIcon(getClass().getResource("/checkicon.png"));
+    private ImageIcon prevIcon = new ImageIcon(getClass().getResource("/previcon.png"));
     private JLabel lblAmount_1;
     private int id;
 

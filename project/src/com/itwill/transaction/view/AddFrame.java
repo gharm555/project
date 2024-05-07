@@ -56,8 +56,8 @@ public class AddFrame extends JFrame {
     private JTextField noteField;
     private AddNotify app;
     private Date date;
-    private ImageIcon checkIcon = new ImageIcon("project/icon/checkicon.png");
-    private ImageIcon prevIcon = new ImageIcon("project/icon/previcon.png");
+    private ImageIcon checkIcon = new ImageIcon(getClass().getResource("/checkicon.png"));
+    private ImageIcon prevIcon = new ImageIcon(getClass().getResource("/previcon.png"));
     private JLabel lblAmount;
     private JLabel lblAmount_1;
 
