@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -57,6 +58,7 @@ public class ChartFrame extends JFrame {
 	private ImageIcon prevIcon = new ImageIcon(getClass().getResource("/previcon.png"));
 	private ImageIcon nextIcon = new ImageIcon(getClass().getResource("/nexticon.png"));
 	private ImageIcon closeIcon = new ImageIcon(getClass().getResource("/closeicon.png"));
+	private Image icon = new ImageIcon(getClass().getResource("/icon.png")).getImage(); 
 
 	private JLabel lblToday;
 
@@ -132,6 +134,7 @@ public class ChartFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public void init() {
+	  setIconImage(icon);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 850, 650);
 		setResizable(false);

@@ -3,6 +3,7 @@ package com.itwill.transaction.view;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -49,6 +50,7 @@ public class Main implements AddNotify, UpdateNotify, ChartNotify {
 	private ImageIcon deleteIcon = new ImageIcon(getClass().getResource("/deleteicon.png"));
 	private ImageIcon chartIcon = new ImageIcon(getClass().getResource("/charticon.png"));
 	private ImageIcon addIcon = new ImageIcon(getClass().getResource("/addicon.png"));
+	private Image icon = new ImageIcon(getClass().getResource("/icon.png")).getImage(); 
 	private JLabel lblToday;
 
 	public static void main(String[] args) {
@@ -72,6 +74,7 @@ public class Main implements AddNotify, UpdateNotify, ChartNotify {
 
 	private void initialize() {
 		frame = new JFrame();
+		frame.setIconImage(icon);
 		frame.setTitle("Money Manager");
 		frame.setBounds(100, 100, 850, 650);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
