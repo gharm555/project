@@ -50,7 +50,7 @@ public class Main implements AddNotify, UpdateNotify, ChartNotify {
 	private ImageIcon deleteIcon = new ImageIcon(getClass().getResource("/deleteicon.png"));
 	private ImageIcon chartIcon = new ImageIcon(getClass().getResource("/charticon.png"));
 	private ImageIcon addIcon = new ImageIcon(getClass().getResource("/addicon.png"));
-	private Image icon = new ImageIcon(getClass().getResource("/icon.png")).getImage(); 
+	private Image icon = new ImageIcon(getClass().getResource("/icon.png")).getImage();
 	private JLabel lblToday;
 
 	public static void main(String[] args) {
